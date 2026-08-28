@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Automatic High Accuracy GPS</title>
+    <title>High Accuracy GPS Location</title>
 
     <style>
       * {
@@ -97,6 +97,37 @@
         line-height: 1.5;
       }
 
+      button {
+        width: 100%;
+
+        border: none;
+
+        padding: 15px;
+
+        border-radius: 12px;
+
+        background: #2563eb;
+
+        color: white;
+
+        font-size: 16px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      button:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+      }
+
       .map {
         display: none;
 
@@ -126,25 +157,7 @@
       .copy {
         display: none;
 
-        width: 100%;
-
-        border: none;
-
-        padding: 15px;
-
-        border-radius: 12px;
-
         background: #111827;
-
-        color: white;
-
-        font-size: 16px;
-
-        font-weight: bold;
-
-        cursor: pointer;
-
-        margin-top: 12px;
       }
 
       .copy:hover {
@@ -162,85 +175,67 @@
 
         line-height: 1.5;
       }
-
-      .loading {
-        text-align: center;
-
-        margin: 20px 0;
-      }
-
-      .loader {
-        width: 40px;
-        height: 40px;
-
-        border: 4px solid #e5e7eb;
-        border-top: 4px solid #2563eb;
-
-        border-radius: 50%;
-
-        animation: spin 1s linear infinite;
-
-        margin: 0 auto 12px;
-      }
-
-      @keyframes spin {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
     </style>
   </head>
 
   <body>
     <div class="card">
-      <h2>📍 Automatic GPS Location</h2>
+      <h2>📍 High Accuracy GPS</h2>
 
-      <div id="status" class="status">Starting GPS automatically...</div>
+      <!-- STATUS -->
 
-      <div id="loading" class="loading">
-        <div class="loader"></div>
-        <div>Searching for GPS location...</div>
-      </div>
+      <div id="status" class="status">Click the button to detect your location</div>
 
       <!-- LATITUDE -->
+
       <div class="box">
-        <span class="label">Latitude</span>
+        <span class="label"> Latitude </span>
 
         <span class="value" id="lat"> --- </span>
       </div>
 
       <!-- LONGITUDE -->
+
       <div class="box">
-        <span class="label">Longitude</span>
+        <span class="label"> Longitude </span>
 
         <span class="value" id="lon"> --- </span>
       </div>
 
       <!-- ACCURACY -->
+
       <div class="box">
-        <span class="label">GPS Accuracy</span>
+        <span class="label"> GPS Accuracy </span>
 
         <span class="value" id="accuracy"> --- </span>
       </div>
 
       <!-- READING -->
+
       <div class="box">
-        <span class="label">Best Reading</span>
+        <span class="label"> Best Reading </span>
 
         <span class="value" id="reading"> --- </span>
       </div>
 
-      <!-- GOOGLE MAP URL -->
+      <!-- GOOGLE MAPS URL -->
+
       <div class="box">
-        <span class="label">Google Maps URL</span>
+        <span class="label"> Google Maps URL </span>
 
         <span class="value" id="mapUrl"> --- </span>
       </div>
 
-      <!-- GOOGLE MAP BUTTON -->
+      <!-- GET LOCATION -->
+
+      <button id="locationBtn" type="button" onclick="getHighAccuracyLocation()">📍 Get My Exact Location</button>
+
+      <!-- OPEN GOOGLE MAPS -->
+
       <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
-      <!-- COPY BUTTON -->
+      <!-- COPY URL -->
+
       <button id="copyBtn" class="copy" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
 
       <div class="small">GPS accuracy depends on your device and surroundings. Outdoor GPS generally provides better accuracy.</div>
@@ -248,8 +243,8 @@
 
     <script>
       /* =====================================================
-     SETTINGS
-  ===================================================== */
+   VARIABLES
+===================================================== */
 
       let bestPosition = null;
 
@@ -259,28 +254,11 @@
 
       const MAX_READINGS = 10;
 
-      /*
-    10 meters ya usse better mil gaya
-    to GPS immediately finish ho jayega.
-  */
-
       const MIN_ACCURACY = 10;
 
       /* =====================================================
-     START AUTOMATICALLY
-  ===================================================== */
-
-      window.addEventListener("load", function () {
-        /*
-      Page open hote hi GPS start
-    */
-
-        getHighAccuracyLocation();
-      });
-
-      /* =====================================================
-     GET HIGH ACCURACY LOCATION
-  ===================================================== */
+   GET LOCATION
+===================================================== */
 
       function getHighAccuracyLocation() {
         const status = document.getElementById("status");
@@ -293,17 +271,17 @@
 
         const reading = document.getElementById("reading");
 
-        const mapUrl = document.getElementById("mapUrl");
+        const button = document.getElementById("locationBtn");
 
         const map = document.getElementById("map");
 
         const copyBtn = document.getElementById("copyBtn");
 
-        const loading = document.getElementById("loading");
+        const mapUrl = document.getElementById("mapUrl");
 
-        /* =================================================
-       STOP OLD GPS
-    ================================================= */
+        /* ---------------------------------------------
+       STOP OLD GPS WATCH
+    --------------------------------------------- */
 
         if (watchId !== null) {
           navigator.geolocation.clearWatch(watchId);
@@ -311,9 +289,9 @@
           watchId = null;
         }
 
-        /* =================================================
+        /* ---------------------------------------------
        RESET
-    ================================================= */
+    --------------------------------------------- */
 
         bestPosition = null;
 
@@ -333,37 +311,39 @@
 
         copyBtn.style.display = "none";
 
-        loading.style.display = "block";
-
-        /* =================================================
+        /* ---------------------------------------------
        CHECK GEOLOCATION
-    ================================================= */
+    --------------------------------------------- */
 
         if (!navigator.geolocation) {
-          loading.style.display = "none";
-
           status.innerHTML = "❌ Your browser does not support GPS location.";
 
           return;
         }
 
-        /* =================================================
-       CHECK HTTPS / LOCALHOST
-    ================================================= */
+        /* ---------------------------------------------
+       HTTPS CHECK
+    --------------------------------------------- */
 
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
-          loading.style.display = "none";
-
           status.innerHTML = "⚠️ Location requires HTTPS or localhost.";
 
           return;
         }
 
-        /* =================================================
-       START GPS
-    ================================================= */
+        /* ---------------------------------------------
+       BUTTON
+    --------------------------------------------- */
 
-        status.innerHTML = "📡 Requesting GPS permission...";
+        button.disabled = true;
+
+        button.innerHTML = "⏳ Searching GPS...";
+
+        status.innerHTML = "📡 Getting your location...";
+
+        /* ---------------------------------------------
+       START GPS
+    --------------------------------------------- */
 
         watchId = navigator.geolocation.watchPosition(
           function (position) {
@@ -373,31 +353,30 @@
 
             console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
 
-            /* =========================================
-             SAVE BEST LOCATION
-          ========================================= */
+            /* ---------------------------------
+                   SAVE BEST LOCATION
+                --------------------------------- */
 
             if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
               bestPosition = position;
 
               /*
-              Display current best location
-            */
+                     IMPORTANT:
+
+                     Location milte hi
+                     URL create hoga.
+                    */
 
               showPosition(position);
 
-              /*
-              Create Google Maps URL
-            */
-
               createGoogleMapsURL(position);
 
-              status.innerHTML = "📍 GPS location found. Improving accuracy...";
+              status.innerHTML = "📍 Location found. Improving accuracy...";
             }
 
-            /* =========================================
-             EXCELLENT ACCURACY
-          ========================================= */
+            /* ---------------------------------
+                   VERY GOOD ACCURACY
+                --------------------------------- */
 
             if (currentAccuracy <= MIN_ACCURACY) {
               finishLocation();
@@ -405,9 +384,9 @@
               return;
             }
 
-            /* =========================================
-             MAXIMUM READINGS
-          ========================================= */
+            /* ---------------------------------
+                   MAX READINGS
+                --------------------------------- */
 
             if (readings >= MAX_READINGS) {
               finishLocation();
@@ -417,53 +396,25 @@
           },
 
           function (error) {
-            loading.style.display = "none";
+            button.disabled = false;
 
-            console.error("GPS Error:", error);
-
-            /* =========================================
-             PERMISSION DENIED
-          ========================================= */
+            button.innerHTML = "📍 Get My Exact Location";
 
             if (error.code === 1) {
-              status.innerHTML = "❌ Location permission denied.<br><br>" + "Chrome me Location → Allow karo.";
+              status.innerHTML = "❌ Location permission denied. Chrome me Location → Allow karo.";
             } else if (error.code === 2) {
-
-            /* =========================================
-             POSITION UNAVAILABLE
-          ========================================= */
-              status.innerHTML = "❌ Location unavailable.<br><br>" + "GPS / Wi-Fi / Location Services check karo.";
+              status.innerHTML = "❌ Location unavailable. GPS/Wi-Fi check karo.";
             } else if (error.code === 3) {
-
-            /* =========================================
-             TIMEOUT
-          ========================================= */
-              status.innerHTML = "❌ GPS timeout.<br><br>" + "Location signal nahi mila.";
+              status.innerHTML = "❌ GPS timeout. Dobara try karo.";
             } else {
-
-            /* =========================================
-             UNKNOWN ERROR
-          ========================================= */
               status.innerHTML = "❌ Unable to get location.";
             }
           },
 
           {
-            /*
-            HIGH ACCURACY ENABLED
-          */
-
             enableHighAccuracy: true,
 
-            /*
-            Maximum 30 seconds wait
-          */
-
             timeout: 30000,
-
-            /*
-            Old cached location use nahi karna
-          */
 
             maximumAge: 0,
           },
@@ -471,8 +422,8 @@
       }
 
       /* =====================================================
-     SHOW POSITION
-  ===================================================== */
+   SHOW POSITION
+===================================================== */
 
       function showPosition(position) {
         const latitude = position.coords.latitude;
@@ -497,24 +448,28 @@
       }
 
       /* =====================================================
-     GOOGLE MAPS URL
-  ===================================================== */
+   CREATE GOOGLE MAPS URL
+===================================================== */
 
       function createGoogleMapsURL(position) {
         const latitude = position.coords.latitude;
 
         const longitude = position.coords.longitude;
 
+        /*
+       Google Maps URL
+    */
+
         const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
         /*
-      Show URL
+       SHOW URL IMMEDIATELY
     */
 
         document.getElementById("mapUrl").innerHTML = googleMapsURL;
 
         /*
-      Google Maps button
+       SET MAP BUTTON
     */
 
         const map = document.getElementById("map");
@@ -527,13 +482,13 @@
       }
 
       /* =====================================================
-     FINISH LOCATION
-  ===================================================== */
+   FINISH LOCATION
+===================================================== */
 
       function finishLocation() {
-        /*
-      Stop GPS watch
-    */
+        /* ---------------------------------------------
+       STOP WATCH
+    --------------------------------------------- */
 
         if (watchId !== null) {
           navigator.geolocation.clearWatch(watchId);
@@ -541,17 +496,19 @@
           watchId = null;
         }
 
+        const button = document.getElementById("locationBtn");
+
         const status = document.getElementById("status");
 
         const copyBtn = document.getElementById("copyBtn");
 
-        const loading = document.getElementById("loading");
+        button.disabled = false;
 
-        loading.style.display = "none";
+        button.innerHTML = "🔄 Get Location Again";
 
-        /*
-      Location check
-    */
+        /* ---------------------------------------------
+       CHECK LOCATION
+    --------------------------------------------- */
 
         if (!bestPosition) {
           status.innerHTML = "❌ Location not found.";
@@ -565,20 +522,20 @@
 
         const acc = bestPosition.coords.accuracy;
 
-        /*
-      Final Google Maps URL
-    */
+        /* ---------------------------------------------
+       FINAL GOOGLE MAPS URL
+    --------------------------------------------- */
 
         const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
         /*
-      Show final URL
+       URL SHOW
     */
 
         document.getElementById("mapUrl").innerHTML = googleMapsURL;
 
         /*
-      Google Maps button
+       MAP BUTTON
     */
 
         const map = document.getElementById("map");
@@ -588,14 +545,14 @@
         map.style.display = "block";
 
         /*
-      Copy button
+       COPY BUTTON
     */
 
         copyBtn.style.display = "block";
 
-        /* =========================================
+        /* ---------------------------------------------
        ACCURACY STATUS
-    ========================================= */
+    --------------------------------------------- */
 
         if (acc <= 10) {
           status.innerHTML = "✅ Excellent GPS accuracy: " + acc.toFixed(2) + " meters";
@@ -619,12 +576,12 @@
       }
 
       /* =====================================================
-     COPY GOOGLE MAPS URL
-  ===================================================== */
+   COPY GOOGLE MAPS URL
+===================================================== */
 
       function copyLocation() {
         if (!bestPosition) {
-          alert("Location available nahi hai.");
+          alert("Pehle location get karo.");
 
           return;
         }
@@ -635,9 +592,9 @@
 
         const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-        /* =========================================
-       MODERN CLIPBOARD
-    ========================================= */
+        /* ---------------------------------------------
+       COPY
+    --------------------------------------------- */
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard
@@ -662,8 +619,8 @@
       }
 
       /* =====================================================
-     FALLBACK COPY
-  ===================================================== */
+   FALLBACK COPY
+===================================================== */
 
       function fallbackCopy(text) {
         const textarea = document.createElement("textarea");
