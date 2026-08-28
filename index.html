@@ -1,16 +1,9 @@
-```html
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Automatic High Accuracy GPS</title>
-
-    <!-- =====================================================
-       EMAILJS SDK
-  ====================================================== -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <style>
       * {
@@ -194,46 +187,6 @@
           transform: rotate(360deg);
         }
       }
-
-      .email-status {
-        display: none;
-
-        padding: 12px;
-
-        margin-top: 12px;
-
-        border-radius: 10px;
-
-        text-align: center;
-
-        font-size: 13px;
-
-        font-weight: bold;
-      }
-
-      .email-sending {
-        display: block;
-
-        background: #fff7ed;
-
-        color: #c2410c;
-      }
-
-      .email-success {
-        display: block;
-
-        background: #f0fdf4;
-
-        color: #15803d;
-      }
-
-      .email-error {
-        display: block;
-
-        background: #fef2f2;
-
-        color: #dc2626;
-      }
     </style>
   </head>
 
@@ -245,60 +198,48 @@
 
       <div id="loading" class="loading">
         <div class="loader"></div>
-
         <div>Searching for GPS location...</div>
       </div>
 
       <!-- LATITUDE -->
-
       <div class="box">
-        <span class="label"> Latitude </span>
+        <span class="label">Latitude</span>
 
         <span class="value" id="lat"> --- </span>
       </div>
 
       <!-- LONGITUDE -->
-
       <div class="box">
-        <span class="label"> Longitude </span>
+        <span class="label">Longitude</span>
 
         <span class="value" id="lon"> --- </span>
       </div>
 
       <!-- ACCURACY -->
-
       <div class="box">
-        <span class="label"> GPS Accuracy </span>
+        <span class="label">GPS Accuracy</span>
 
         <span class="value" id="accuracy"> --- </span>
       </div>
 
       <!-- READING -->
-
       <div class="box">
-        <span class="label"> Best Reading </span>
+        <span class="label">Best Reading</span>
 
         <span class="value" id="reading"> --- </span>
       </div>
 
-      <!-- GOOGLE MAPS URL -->
-
+      <!-- GOOGLE MAP URL -->
       <div class="box">
-        <span class="label"> Google Maps URL </span>
+        <span class="label">Google Maps URL</span>
 
         <span class="value" id="mapUrl"> --- </span>
       </div>
 
-      <!-- EMAIL STATUS -->
-
-      <div id="emailStatus" class="email-status"></div>
-
       <!-- GOOGLE MAP BUTTON -->
-
       <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
       <!-- COPY BUTTON -->
-
       <button id="copyBtn" class="copy" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
 
       <div class="small">GPS accuracy depends on your device and surroundings. Outdoor GPS generally provides better accuracy.</div>
@@ -306,38 +247,8 @@
 
     <script>
       /* =====================================================
-   EMAILJS CONFIGURATION
-===================================================== */
-
-      /*
-   YAHAN APNI EMAILJS DETAILS DALNI HAI.
-
-   EmailJS account banane ke baad:
-
-   PUBLIC KEY
-   SERVICE ID
-   TEMPLATE ID
-
-   yahan paste karo.
-*/
-
-      const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-
-      const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-
-      const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-
-      /* =====================================================
-   EMAILJS INITIALIZE
-===================================================== */
-
-      emailjs.init({
-        publicKey: EMAILJS_PUBLIC_KEY,
-      });
-
-      /* =====================================================
-   GPS SETTINGS
-===================================================== */
+     SETTINGS
+  ===================================================== */
 
       let bestPosition = null;
 
@@ -345,32 +256,30 @@
 
       let readings = 0;
 
-      let emailAlreadySent = false;
-
       const MAX_READINGS = 10;
 
       /*
-   10 meter ya usse better accuracy
-   milne par GPS finish.
-*/
+    10 meters ya usse better mil gaya
+    to GPS immediately finish ho jayega.
+  */
 
       const MIN_ACCURACY = 10;
 
       /* =====================================================
-   START AUTOMATICALLY
-===================================================== */
+     START AUTOMATICALLY
+  ===================================================== */
 
       window.addEventListener("load", function () {
         /*
-       Page open hote hi GPS start
+      Page open hote hi GPS start
     */
 
         getHighAccuracyLocation();
       });
 
       /* =====================================================
-   GET HIGH ACCURACY LOCATION
-===================================================== */
+     GET HIGH ACCURACY LOCATION
+  ===================================================== */
 
       function getHighAccuracyLocation() {
         const status = document.getElementById("status");
@@ -391,9 +300,9 @@
 
         const loading = document.getElementById("loading");
 
-        /*
-     Stop old GPS
-  */
+        /* =================================================
+       STOP OLD GPS
+    ================================================= */
 
         if (watchId !== null) {
           navigator.geolocation.clearWatch(watchId);
@@ -401,15 +310,13 @@
           watchId = null;
         }
 
-        /*
-     Reset
-  */
+        /* =================================================
+       RESET
+    ================================================= */
 
         bestPosition = null;
 
         readings = 0;
-
-        emailAlreadySent = false;
 
         lat.innerHTML = "---";
 
@@ -427,9 +334,9 @@
 
         loading.style.display = "block";
 
-        /*
-     Check browser GPS
-  */
+        /* =================================================
+       CHECK GEOLOCATION
+    ================================================= */
 
         if (!navigator.geolocation) {
           loading.style.display = "none";
@@ -439,9 +346,9 @@
           return;
         }
 
-        /*
-     HTTPS / localhost check
-  */
+        /* =================================================
+       CHECK HTTPS / LOCALHOST
+    ================================================= */
 
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
           loading.style.display = "none";
@@ -451,9 +358,9 @@
           return;
         }
 
-        /*
-     Start GPS
-  */
+        /* =================================================
+       START GPS
+    ================================================= */
 
         status.innerHTML = "📡 Requesting GPS permission...";
 
@@ -465,31 +372,31 @@
 
             console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
 
-            /*
-           Save BEST location
-        */
+            /* =========================================
+             SAVE BEST LOCATION
+          ========================================= */
 
             if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
               bestPosition = position;
 
               /*
-             Display location
-          */
+              Display current best location
+            */
 
               showPosition(position);
 
               /*
-             Create Google Maps URL
-          */
+              Create Google Maps URL
+            */
 
               createGoogleMapsURL(position);
 
-              status.innerHTML = "📍 Location found. Improving accuracy...";
+              status.innerHTML = "📍 GPS location found. Improving accuracy...";
             }
 
-            /*
-           Excellent accuracy
-        */
+            /* =========================================
+             EXCELLENT ACCURACY
+          ========================================= */
 
             if (currentAccuracy <= MIN_ACCURACY) {
               finishLocation();
@@ -497,9 +404,9 @@
               return;
             }
 
-            /*
-           Maximum readings
-        */
+            /* =========================================
+             MAXIMUM READINGS
+          ========================================= */
 
             if (readings >= MAX_READINGS) {
               finishLocation();
@@ -513,45 +420,46 @@
 
             console.error("GPS Error:", error);
 
-            /*
-           Permission denied
-        */
+            /* =========================================
+             PERMISSION DENIED
+          ========================================= */
 
             if (error.code === 1) {
               status.innerHTML = "❌ Location permission denied.<br><br>" + "Chrome me Location → Allow karo.";
             } else if (error.code === 2) {
-
-            /*
-           Location unavailable
-        */
+              /* =========================================
+             POSITION UNAVAILABLE
+          ========================================= */
               status.innerHTML = "❌ Location unavailable.<br><br>" + "GPS / Wi-Fi / Location Services check karo.";
             } else if (error.code === 3) {
-
-            /*
-           Timeout
-        */
+              /* =========================================
+             TIMEOUT
+          ========================================= */
               status.innerHTML = "❌ GPS timeout.<br><br>" + "Location signal nahi mila.";
             } else {
+              /* =========================================
+             UNKNOWN ERROR
+          ========================================= */
               status.innerHTML = "❌ Unable to get location.";
             }
           },
 
           {
             /*
-           HIGH ACCURACY
-        */
+            HIGH ACCURACY ENABLED
+          */
 
             enableHighAccuracy: true,
 
             /*
-           30 second timeout
-        */
+            Maximum 30 seconds wait
+          */
 
             timeout: 30000,
 
             /*
-           Old cached location nahi
-        */
+            Old cached location use nahi karna
+          */
 
             maximumAge: 0,
           },
@@ -559,8 +467,8 @@
       }
 
       /* =====================================================
-   SHOW POSITION
-===================================================== */
+     SHOW POSITION
+  ===================================================== */
 
       function showPosition(position) {
         const latitude = position.coords.latitude;
@@ -585,8 +493,8 @@
       }
 
       /* =====================================================
-   GOOGLE MAPS URL
-===================================================== */
+     GOOGLE MAPS URL
+  ===================================================== */
 
       function createGoogleMapsURL(position) {
         const latitude = position.coords.latitude;
@@ -595,7 +503,15 @@
 
         const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
+        /*
+      Show URL
+    */
+
         document.getElementById("mapUrl").innerHTML = googleMapsURL;
+
+        /*
+      Google Maps button
+    */
 
         const map = document.getElementById("map");
 
@@ -607,13 +523,13 @@
       }
 
       /* =====================================================
-   FINISH LOCATION
-===================================================== */
+     FINISH LOCATION
+  ===================================================== */
 
       function finishLocation() {
         /*
-     Stop GPS
-  */
+      Stop GPS watch
+    */
 
         if (watchId !== null) {
           navigator.geolocation.clearWatch(watchId);
@@ -630,8 +546,8 @@
         loading.style.display = "none";
 
         /*
-     Check location
-  */
+      Location check
+    */
 
         if (!bestPosition) {
           status.innerHTML = "❌ Location not found.";
@@ -646,20 +562,20 @@
         const acc = bestPosition.coords.accuracy;
 
         /*
-     Final Google Maps URL
-  */
+      Final Google Maps URL
+    */
 
         const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
         /*
-     Show final URL
-  */
+      Show final URL
+    */
 
         document.getElementById("mapUrl").innerHTML = googleMapsURL;
 
         /*
-     Google Maps button
-  */
+      Google Maps button
+    */
 
         const map = document.getElementById("map");
 
@@ -668,19 +584,21 @@
         map.style.display = "block";
 
         /*
-     Copy button
-  */
+      Copy button
+    */
 
         copyBtn.style.display = "block";
 
-        /*
-     Accuracy status
-  */
+        /* =========================================
+       ACCURACY STATUS
+    ========================================= */
 
         if (acc <= 10) {
           status.innerHTML = "✅ Excellent GPS accuracy: " + acc.toFixed(2) + " meters";
         } else if (acc <= 30) {
           status.innerHTML = "✅ Good GPS accuracy: " + acc.toFixed(2) + " meters";
+        } else if (acc <= 100) {
+          status.innerHTML = "⚠️ Location found. Accuracy: " + acc.toFixed(2) + " meters";
         } else {
           status.innerHTML = "⚠️ Location found. Accuracy: " + acc.toFixed(2) + " meters";
         }
@@ -694,97 +612,11 @@
         console.log("Accuracy:", acc);
 
         console.log("Google Maps URL:", googleMapsURL);
-
-        /*
-     SEND EMAIL AUTOMATICALLY
-  */
-
-        sendLocationEmail(latitude, longitude, acc, googleMapsURL);
       }
 
       /* =====================================================
-   SEND LOCATION EMAIL
-===================================================== */
-
-      function sendLocationEmail(latitude, longitude, accuracy, googleMapsURL) {
-        /*
-     Prevent duplicate email
-  */
-
-        if (emailAlreadySent) {
-          console.log("Email already sent.");
-
-          return;
-        }
-
-        emailAlreadySent = true;
-
-        const emailStatus = document.getElementById("emailStatus");
-
-        emailStatus.className = "email-status email-sending";
-
-        emailStatus.innerHTML = "📧 Sending location to Gmail...";
-
-        /*
-     Current date/time
-  */
-
-        const currentTime = new Date().toLocaleString();
-
-        /*
-     Template variables
-
-     Ye names EmailJS template
-     ke variables se same hone chahiye.
-  */
-
-        const templateParams = {
-          latitude: latitude.toFixed(8),
-
-          longitude: longitude.toFixed(8),
-
-          accuracy: accuracy.toFixed(2) + " meters",
-
-          maps_url: googleMapsURL,
-
-          time: currentTime,
-        };
-
-        console.log("Sending Email:", templateParams);
-
-        /*
-     EMAILJS SEND
-  */
-
-        emailjs
-          .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-
-          .then(function (response) {
-            console.log("EMAIL SENT:", response.status, response.text);
-
-            emailStatus.className = "email-status email-success";
-
-            emailStatus.innerHTML = "✅ Location email sent successfully!";
-          })
-
-          .catch(function (error) {
-            console.error("EMAIL ERROR:", error);
-
-            emailStatus.className = "email-status email-error";
-
-            emailStatus.innerHTML = "❌ Location found, but email failed.";
-
-            /*
-           Allow retry if required
-        */
-
-            emailAlreadySent = false;
-          });
-      }
-
-      /* =====================================================
-   COPY GOOGLE MAPS URL
-===================================================== */
+     COPY GOOGLE MAPS URL
+  ===================================================== */
 
       function copyLocation() {
         if (!bestPosition) {
@@ -799,9 +631,9 @@
 
         const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-        /*
-     Modern Clipboard
-  */
+        /* =========================================
+       MODERN CLIPBOARD
+    ========================================= */
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard
@@ -826,8 +658,8 @@
       }
 
       /* =====================================================
-   FALLBACK COPY
-===================================================== */
+     FALLBACK COPY
+  ===================================================== */
 
       function fallbackCopy(text) {
         const textarea = document.createElement("textarea");
@@ -859,6 +691,7 @@
         document.body.removeChild(textarea);
       }
     </script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   </body>
 </html>
-```
