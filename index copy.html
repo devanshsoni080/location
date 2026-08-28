@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Location</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .location-card {
+        width: 350px;
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .location-card h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+        color: #111;
+      }
+
+      .data-box {
+        background: #f1f5f9;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+
+      .label {
+        display: block;
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 5px;
+      }
+
+      .value {
+        font-size: 17px;
+        font-weight: bold;
+        color: #111827;
+      }
+
+      .status {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      .success {
+        color: green;
+      }
+
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="location-card">
+      <h2>📍 My Location</h2>
+
+      <div class="data-box">
+        <span class="label">Latitude</span>
+        <span class="value" id="latitude">Loading...</span>
+      </div>
+
+      <div class="data-box">
+        <span class="label">Longitude</span>
+        <span class="value" id="longitude">Loading...</span>
+      </div>
+
+      <div class="data-box">
+        <span class="label">Accuracy</span>
+        <span class="value" id="accuracy">Loading...</span>
+      </div>
+
+      <div class="status" id="status">Detecting location...</div>
+    </div>
+
+    <script>
+      function showLocation(lat, lon, accuracy) {
+        document.getElementById("latitude").innerText = Number(lat).toFixed(6);
+
+        document.getElementById("longitude").innerText = Number(lon).toFixed(6);
+
+        document.getElementById("accuracy").innerText = accuracy;
+      }
+
+      // IP LOCATION FALLBACK
+      async function getIPLocation() {
+        try {
+          document.getElementById("status").innerText = "GPS permission denied. Detecting approximate location...";
+
+          const response = await fetch("https://ipapi.co/json/");
+
+          const data = await response.json();
+
+          if (!data.latitude || !data.longitude) {
+            throw new Error("IP location unavailable");
+          }
+
+          showLocation(data.latitude, data.longitude, "Approximate");
+
+          document.getElementById("status").innerText = "Approximate location detected.";
+
+          document.getElementById("status").classList.add("success");
+        } catch (error) {
+          document.getElementById("status").innerText = "Unable to detect location.";
+
+          document.getElementById("status").classList.add("error");
+        }
+      }
+
+      // GPS LOCATION
+      function getLocation() {
+        if (!navigator.geolocation) {
+          getIPLocation();
+
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const lat = position.coords.latitude;
+
+            const lon = position.coords.longitude;
+
+            const accuracy = position.coords.accuracy;
+
+            showLocation(lat, lon, accuracy.toFixed(2) + " meters");
+
+            document.getElementById("status").innerText = "Accurate GPS location detected.";
+
+            document.getElementById("status").classList.add("success");
+          },
+
+          function (error) {
+            // Permission denied / GPS unavailable
+            // → IP location fallback
+
+            getIPLocation();
+          },
+
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          },
+        );
+      }
+
+      // START
+      getLocation();
+    </script>
+  </body>
+</html>

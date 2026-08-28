@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>High Accuracy GPS Location</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f3f4f6;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 20px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+
+        background: #ffffff;
+
+        padding: 25px;
+
+        border-radius: 20px;
+
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      h2 {
+        text-align: center;
+        margin: 0 0 25px;
+        color: #111827;
+      }
+
+      .status {
+        padding: 14px;
+
+        background: #eff6ff;
+
+        border-radius: 10px;
+
+        text-align: center;
+
+        color: #1d4ed8;
+
+        font-size: 14px;
+
+        margin-bottom: 18px;
+
+        line-height: 1.5;
+      }
+
+      .box {
+        background: #f8fafc;
+
+        border: 1px solid #e5e7eb;
+
+        padding: 15px;
+
+        border-radius: 12px;
+
+        margin-bottom: 12px;
+      }
+
+      .label {
+        display: block;
+
+        font-size: 13px;
+
+        color: #64748b;
+
+        margin-bottom: 6px;
+      }
+
+      .value {
+        display: block;
+
+        font-size: 16px;
+
+        font-weight: bold;
+
+        color: #111827;
+
+        word-break: break-all;
+
+        line-height: 1.5;
+      }
+
+      button {
+        width: 100%;
+
+        border: none;
+
+        padding: 15px;
+
+        border-radius: 12px;
+
+        background: #2563eb;
+
+        color: white;
+
+        font-size: 16px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      button:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .map {
+        display: none;
+
+        width: 100%;
+
+        text-align: center;
+
+        text-decoration: none;
+
+        padding: 14px;
+
+        border-radius: 12px;
+
+        background: #16a34a;
+
+        color: white;
+
+        font-weight: bold;
+
+        margin-top: 12px;
+      }
+
+      .map:hover {
+        background: #15803d;
+      }
+
+      .copy {
+        display: none;
+
+        background: #111827;
+      }
+
+      .copy:hover {
+        background: #000000;
+      }
+
+      .small {
+        text-align: center;
+
+        color: #64748b;
+
+        font-size: 12px;
+
+        margin-top: 18px;
+
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h2>📍 High Accuracy GPS</h2>
+
+      <!-- STATUS -->
+
+      <div id="status" class="status">Click the button to detect your location</div>
+
+      <!-- LATITUDE -->
+
+      <div class="box">
+        <span class="label"> Latitude </span>
+
+        <span class="value" id="lat"> --- </span>
+      </div>
+
+      <!-- LONGITUDE -->
+
+      <div class="box">
+        <span class="label"> Longitude </span>
+
+        <span class="value" id="lon"> --- </span>
+      </div>
+
+      <!-- ACCURACY -->
+
+      <div class="box">
+        <span class="label"> GPS Accuracy </span>
+
+        <span class="value" id="accuracy"> --- </span>
+      </div>
+
+      <!-- READING -->
+
+      <div class="box">
+        <span class="label"> Best Reading </span>
+
+        <span class="value" id="reading"> --- </span>
+      </div>
+
+      <!-- GOOGLE MAPS URL -->
+
+      <div class="box">
+        <span class="label"> Google Maps URL </span>
+
+        <span class="value" id="mapUrl"> --- </span>
+      </div>
+
+      <!-- GET LOCATION -->
+
+      <button id="locationBtn" type="button" onclick="getHighAccuracyLocation()">📍 Get My Exact Location</button>
+
+      <!-- OPEN GOOGLE MAPS -->
+
+      <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
+
+      <!-- COPY URL -->
+
+      <button id="copyBtn" class="copy" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
+
+      <div class="small">GPS accuracy depends on your device and surroundings. Outdoor GPS generally provides better accuracy.</div>
+    </div>
+
+    <script>
+      /* =====================================================
+   VARIABLES
+===================================================== */
+
+      let bestPosition = null;
+
+      let watchId = null;
+
+      let readings = 0;
+
+      const MAX_READINGS = 10;
+
+      const MIN_ACCURACY = 10;
+
+      /* =====================================================
+   GET LOCATION
+===================================================== */
+
+      function getHighAccuracyLocation() {
+        const status = document.getElementById("status");
+
+        const lat = document.getElementById("lat");
+
+        const lon = document.getElementById("lon");
+
+        const accuracy = document.getElementById("accuracy");
+
+        const reading = document.getElementById("reading");
+
+        const button = document.getElementById("locationBtn");
+
+        const map = document.getElementById("map");
+
+        const copyBtn = document.getElementById("copyBtn");
+
+        const mapUrl = document.getElementById("mapUrl");
+
+        /* ---------------------------------------------
+       STOP OLD GPS WATCH
+    --------------------------------------------- */
+
+        if (watchId !== null) {
+          navigator.geolocation.clearWatch(watchId);
+
+          watchId = null;
+        }
+
+        /* ---------------------------------------------
+       RESET
+    --------------------------------------------- */
+
+        bestPosition = null;
+
+        readings = 0;
+
+        lat.innerHTML = "---";
+
+        lon.innerHTML = "---";
+
+        accuracy.innerHTML = "---";
+
+        reading.innerHTML = "---";
+
+        mapUrl.innerHTML = "---";
+
+        map.style.display = "none";
+
+        copyBtn.style.display = "none";
+
+        /* ---------------------------------------------
+       CHECK GEOLOCATION
+    --------------------------------------------- */
+
+        if (!navigator.geolocation) {
+          status.innerHTML = "❌ Your browser does not support GPS location.";
+
+          return;
+        }
+
+        /* ---------------------------------------------
+       HTTPS CHECK
+    --------------------------------------------- */
+
+        if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+          status.innerHTML = "⚠️ Location requires HTTPS or localhost.";
+
+          return;
+        }
+
+        /* ---------------------------------------------
+       BUTTON
+    --------------------------------------------- */
+
+        button.disabled = true;
+
+        button.innerHTML = "⏳ Searching GPS...";
+
+        status.innerHTML = "📡 Getting your location...";
+
+        /* ---------------------------------------------
+       START GPS
+    --------------------------------------------- */
+
+        watchId = navigator.geolocation.watchPosition(
+          function (position) {
+            readings++;
+
+            const currentAccuracy = position.coords.accuracy;
+
+            console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
+
+            /* ---------------------------------
+                   SAVE BEST LOCATION
+                --------------------------------- */
+
+            if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
+              bestPosition = position;
+
+              /*
+                     IMPORTANT:
+
+                     Location milte hi
+                     URL create hoga.
+                    */
+
+              showPosition(position);
+
+              createGoogleMapsURL(position);
+
+              status.innerHTML = "📍 Location found. Improving accuracy...";
+            }
+
+            /* ---------------------------------
+                   VERY GOOD ACCURACY
+                --------------------------------- */
+
+            if (currentAccuracy <= MIN_ACCURACY) {
+              finishLocation();
+
+              return;
+            }
+
+            /* ---------------------------------
+                   MAX READINGS
+                --------------------------------- */
+
+            if (readings >= MAX_READINGS) {
+              finishLocation();
+
+              return;
+            }
+          },
+
+          function (error) {
+            button.disabled = false;
+
+            button.innerHTML = "📍 Get My Exact Location";
+
+            if (error.code === 1) {
+              status.innerHTML = "❌ Location permission denied. Chrome me Location → Allow karo.";
+            } else if (error.code === 2) {
+              status.innerHTML = "❌ Location unavailable. GPS/Wi-Fi check karo.";
+            } else if (error.code === 3) {
+              status.innerHTML = "❌ GPS timeout. Dobara try karo.";
+            } else {
+              status.innerHTML = "❌ Unable to get location.";
+            }
+          },
+
+          {
+            enableHighAccuracy: true,
+
+            timeout: 30000,
+
+            maximumAge: 0,
+          },
+        );
+      }
+
+      /* =====================================================
+   SHOW POSITION
+===================================================== */
+
+      function showPosition(position) {
+        const latitude = position.coords.latitude;
+
+        const longitude = position.coords.longitude;
+
+        const acc = position.coords.accuracy;
+
+        document.getElementById("lat").innerHTML = latitude.toFixed(8);
+
+        document.getElementById("lon").innerHTML = longitude.toFixed(8);
+
+        document.getElementById("accuracy").innerHTML = acc.toFixed(2) + " meters";
+
+        document.getElementById("reading").innerHTML = readings + " / " + MAX_READINGS;
+
+        console.log("Latitude:", latitude);
+
+        console.log("Longitude:", longitude);
+
+        console.log("Accuracy:", acc);
+      }
+
+      /* =====================================================
+   CREATE GOOGLE MAPS URL
+===================================================== */
+
+      function createGoogleMapsURL(position) {
+        const latitude = position.coords.latitude;
+
+        const longitude = position.coords.longitude;
+
+        /*
+       Google Maps URL
+    */
+
+        const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+        /*
+       SHOW URL IMMEDIATELY
+    */
+
+        document.getElementById("mapUrl").innerHTML = googleMapsURL;
+
+        /*
+       SET MAP BUTTON
+    */
+
+        const map = document.getElementById("map");
+
+        map.href = googleMapsURL;
+
+        map.style.display = "block";
+
+        console.log("Google Maps URL:", googleMapsURL);
+      }
+
+      /* =====================================================
+   FINISH LOCATION
+===================================================== */
+
+      function finishLocation() {
+        /* ---------------------------------------------
+       STOP WATCH
+    --------------------------------------------- */
+
+        if (watchId !== null) {
+          navigator.geolocation.clearWatch(watchId);
+
+          watchId = null;
+        }
+
+        const button = document.getElementById("locationBtn");
+
+        const status = document.getElementById("status");
+
+        const copyBtn = document.getElementById("copyBtn");
+
+        button.disabled = false;
+
+        button.innerHTML = "🔄 Get Location Again";
+
+        /* ---------------------------------------------
+       CHECK LOCATION
+    --------------------------------------------- */
+
+        if (!bestPosition) {
+          status.innerHTML = "❌ Location not found.";
+
+          return;
+        }
+
+        const latitude = bestPosition.coords.latitude;
+
+        const longitude = bestPosition.coords.longitude;
+
+        const acc = bestPosition.coords.accuracy;
+
+        /* ---------------------------------------------
+       FINAL GOOGLE MAPS URL
+    --------------------------------------------- */
+
+        const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+        /*
+       URL SHOW
+    */
+
+        document.getElementById("mapUrl").innerHTML = googleMapsURL;
+
+        /*
+       MAP BUTTON
+    */
+
+        const map = document.getElementById("map");
+
+        map.href = googleMapsURL;
+
+        map.style.display = "block";
+
+        /*
+       COPY BUTTON
+    */
+
+        copyBtn.style.display = "block";
+
+        /* ---------------------------------------------
+       ACCURACY STATUS
+    --------------------------------------------- */
+
+        if (acc <= 10) {
+          status.innerHTML = "✅ Excellent GPS accuracy: " + acc.toFixed(2) + " meters";
+        } else if (acc <= 30) {
+          status.innerHTML = "✅ Good GPS accuracy: " + acc.toFixed(2) + " meters";
+        } else if (acc <= 100) {
+          status.innerHTML = "⚠️ Location found. Accuracy: " + acc.toFixed(2) + " meters";
+        } else {
+          status.innerHTML = "⚠️ Location found. Accuracy: " + acc.toFixed(2) + " meters";
+        }
+
+        console.log("========== FINAL LOCATION ==========");
+
+        console.log("Latitude:", latitude);
+
+        console.log("Longitude:", longitude);
+
+        console.log("Accuracy:", acc);
+
+        console.log("Google Maps URL:", googleMapsURL);
+      }
+
+      /* =====================================================
+   COPY GOOGLE MAPS URL
+===================================================== */
+
+      function copyLocation() {
+        if (!bestPosition) {
+          alert("Pehle location get karo.");
+
+          return;
+        }
+
+        const latitude = bestPosition.coords.latitude;
+
+        const longitude = bestPosition.coords.longitude;
+
+        const googleMapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+        /* ---------------------------------------------
+       COPY
+    --------------------------------------------- */
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(googleMapsURL)
+
+            .then(function () {
+              const button = document.getElementById("copyBtn");
+
+              button.innerHTML = "✅ Google Maps URL Copied!";
+
+              setTimeout(function () {
+                button.innerHTML = "📋 Copy Google Maps URL";
+              }, 2000);
+            })
+
+            .catch(function () {
+              fallbackCopy(googleMapsURL);
+            });
+        } else {
+          fallbackCopy(googleMapsURL);
+        }
+      }
+
+      /* =====================================================
+   FALLBACK COPY
+===================================================== */
+
+      function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+
+        textarea.style.position = "fixed";
+
+        textarea.style.left = "-9999px";
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+
+          const button = document.getElementById("copyBtn");
+
+          button.innerHTML = "✅ Google Maps URL Copied!";
+
+          setTimeout(function () {
+            button.innerHTML = "📋 Copy Google Maps URL";
+          }, 2000);
+        } catch (error) {
+          alert("Google Maps URL:\n\n" + text);
+        }
+
+        document.body.removeChild(textarea);
+      }
+    </script>
+  </body>
+</html>
