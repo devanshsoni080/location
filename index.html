@@ -260,166 +260,166 @@
    GET LOCATION
 ===================================================== */
 
-      function getHighAccuracyLocation() {
-        const status = document.getElementById("status");
+      //   function getHighAccuracyLocation() {
+      const status = document.getElementById("status");
 
-        const lat = document.getElementById("lat");
+      const lat = document.getElementById("lat");
 
-        const lon = document.getElementById("lon");
+      const lon = document.getElementById("lon");
 
-        const accuracy = document.getElementById("accuracy");
+      const accuracy = document.getElementById("accuracy");
 
-        const reading = document.getElementById("reading");
+      const reading = document.getElementById("reading");
 
-        const button = document.getElementById("locationBtn");
+      const button = document.getElementById("locationBtn");
 
-        const map = document.getElementById("map");
+      const map = document.getElementById("map");
 
-        const copyBtn = document.getElementById("copyBtn");
+      const copyBtn = document.getElementById("copyBtn");
 
-        const mapUrl = document.getElementById("mapUrl");
+      const mapUrl = document.getElementById("mapUrl");
 
-        /* ---------------------------------------------
+      /* ---------------------------------------------
        STOP OLD GPS WATCH
     --------------------------------------------- */
 
-        if (watchId !== null) {
-          navigator.geolocation.clearWatch(watchId);
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
 
-          watchId = null;
-        }
+        watchId = null;
+      }
 
-        /* ---------------------------------------------
+      /* ---------------------------------------------
        RESET
     --------------------------------------------- */
 
-        bestPosition = null;
+      bestPosition = null;
 
-        readings = 0;
+      readings = 0;
 
-        lat.innerHTML = "---";
+      lat.innerHTML = "---";
 
-        lon.innerHTML = "---";
+      lon.innerHTML = "---";
 
-        accuracy.innerHTML = "---";
+      accuracy.innerHTML = "---";
 
-        reading.innerHTML = "---";
+      reading.innerHTML = "---";
 
-        mapUrl.innerHTML = "---";
+      mapUrl.innerHTML = "---";
 
-        map.style.display = "none";
+      map.style.display = "none";
 
-        copyBtn.style.display = "none";
+      copyBtn.style.display = "none";
 
-        /* ---------------------------------------------
+      /* ---------------------------------------------
        CHECK GEOLOCATION
     --------------------------------------------- */
 
-        if (!navigator.geolocation) {
-          status.innerHTML = "❌ Your browser does not support GPS location.";
+      if (!navigator.geolocation) {
+        status.innerHTML = "❌ Your browser does not support GPS location.";
 
-          return;
-        }
+        return;
+      }
 
-        /* ---------------------------------------------
+      /* ---------------------------------------------
        HTTPS CHECK
     --------------------------------------------- */
 
-        if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
-          status.innerHTML = "⚠️ Location requires HTTPS or localhost.";
+      if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+        status.innerHTML = "⚠️ Location requires HTTPS or localhost.";
 
-          return;
-        }
+        return;
+      }
 
-        /* ---------------------------------------------
+      /* ---------------------------------------------
        BUTTON
     --------------------------------------------- */
 
-        button.disabled = true;
+      button.disabled = true;
 
-        button.innerHTML = "⏳ Searching GPS...";
+      button.innerHTML = "⏳ Searching GPS...";
 
-        status.innerHTML = "📡 Getting your location...";
+      status.innerHTML = "📡 Getting your location...";
 
-        /* ---------------------------------------------
+      /* ---------------------------------------------
        START GPS
     --------------------------------------------- */
 
-        watchId = navigator.geolocation.watchPosition(
-          function (position) {
-            readings++;
+      watchId = navigator.geolocation.watchPosition(
+        function (position) {
+          readings++;
 
-            const currentAccuracy = position.coords.accuracy;
+          const currentAccuracy = position.coords.accuracy;
 
-            console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
+          console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
 
-            /* ---------------------------------
+          /* ---------------------------------
                    SAVE BEST LOCATION
                 --------------------------------- */
 
-            if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
-              bestPosition = position;
+          if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
+            bestPosition = position;
 
-              /*
+            /*
                      IMPORTANT:
 
                      Location milte hi
                      URL create hoga.
                     */
 
-              showPosition(position);
+            showPosition(position);
 
-              createGoogleMapsURL(position);
+            createGoogleMapsURL(position);
 
-              status.innerHTML = "📍 Location found. Improving accuracy...";
-            }
+            status.innerHTML = "📍 Location found. Improving accuracy...";
+          }
 
-            /* ---------------------------------
+          /* ---------------------------------
                    VERY GOOD ACCURACY
                 --------------------------------- */
 
-            if (currentAccuracy <= MIN_ACCURACY) {
-              finishLocation();
+          if (currentAccuracy <= MIN_ACCURACY) {
+            finishLocation();
 
-              return;
-            }
+            return;
+          }
 
-            /* ---------------------------------
+          /* ---------------------------------
                    MAX READINGS
                 --------------------------------- */
 
-            if (readings >= MAX_READINGS) {
-              finishLocation();
+          if (readings >= MAX_READINGS) {
+            finishLocation();
 
-              return;
-            }
-          },
+            return;
+          }
+        },
 
-          function (error) {
-            button.disabled = false;
+        function (error) {
+          button.disabled = false;
 
-            button.innerHTML = "📍 Get My Exact Location";
+          button.innerHTML = "📍 Get My Exact Location";
 
-            if (error.code === 1) {
-              status.innerHTML = "❌ Location permission denied. Chrome me Location → Allow karo.";
-            } else if (error.code === 2) {
-              status.innerHTML = "❌ Location unavailable. GPS/Wi-Fi check karo.";
-            } else if (error.code === 3) {
-              status.innerHTML = "❌ GPS timeout. Dobara try karo.";
-            } else {
-              status.innerHTML = "❌ Unable to get location.";
-            }
-          },
+          if (error.code === 1) {
+            status.innerHTML = "❌ Location permission denied. Chrome me Location → Allow karo.";
+          } else if (error.code === 2) {
+            status.innerHTML = "❌ Location unavailable. GPS/Wi-Fi check karo.";
+          } else if (error.code === 3) {
+            status.innerHTML = "❌ GPS timeout. Dobara try karo.";
+          } else {
+            status.innerHTML = "❌ Unable to get location.";
+          }
+        },
 
-          {
-            enableHighAccuracy: true,
+        {
+          enableHighAccuracy: true,
 
-            timeout: 30000,
+          timeout: 30000,
 
-            maximumAge: 0,
-          },
-        );
-      }
+          maximumAge: 0,
+        },
+      );
+      //   }
 
       /* =====================================================
    SHOW POSITION
