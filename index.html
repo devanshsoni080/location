@@ -423,6 +423,19 @@
               createGoogleMapsURL(position);
 
               status.innerHTML = "📍 Location found. Accuracy improve ho rahi hai...";
+
+              /* =========================================
+     SAVE BUTTON SHOW
+     GPS LOCATION MILTE HI BUTTON DIKHEGA
+  ========================================= */
+
+              const saveBtn = document.getElementById("saveBtn");
+
+              if (saveBtn) {
+                saveBtn.style.display = "block";
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = "💾 Save Data to Google Sheet";
+              }
             }
 
             /* EXCELLENT */
