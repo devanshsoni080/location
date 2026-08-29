@@ -13,22 +13,24 @@
 
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f3f4f6;
+        padding: 20px;
+
         min-height: 100vh;
 
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
 
-        padding: 20px;
+        font-family: Arial, sans-serif;
+
+        background: #f3f4f6;
       }
 
       .card {
         width: 100%;
         max-width: 420px;
 
-        background: white;
+        background: #ffffff;
 
         padding: 25px;
 
@@ -38,8 +40,9 @@
       }
 
       h2 {
+        margin: 0 0 20px;
+
         text-align: center;
-        margin: 0 0 25px;
 
         color: #111827;
       }
@@ -47,19 +50,19 @@
       .status {
         padding: 14px;
 
-        background: #eff6ff;
-
         border-radius: 10px;
 
-        text-align: center;
+        background: #eff6ff;
 
         color: #1d4ed8;
 
+        text-align: center;
+
         font-size: 14px;
 
-        margin-bottom: 18px;
-
         line-height: 1.5;
+
+        margin-bottom: 18px;
       }
 
       .loading {
@@ -72,15 +75,15 @@
         width: 40px;
         height: 40px;
 
+        margin: 0 auto 12px;
+
         border: 4px solid #e5e7eb;
 
-        border-top: 4px solid #2563eb;
+        border-top-color: #2563eb;
 
         border-radius: 50%;
 
         animation: spin 1s linear infinite;
-
-        margin: 0 auto 12px;
       }
 
       @keyframes spin {
@@ -90,39 +93,39 @@
       }
 
       .box {
+        margin-bottom: 12px;
+
+        padding: 15px;
+
         background: #f8fafc;
 
         border: 1px solid #e5e7eb;
 
-        padding: 15px;
-
         border-radius: 12px;
-
-        margin-bottom: 12px;
       }
 
       .label {
         display: block;
 
-        font-size: 13px;
+        margin-bottom: 6px;
 
         color: #64748b;
 
-        margin-bottom: 6px;
+        font-size: 13px;
       }
 
       .value {
         display: block;
 
+        color: #111827;
+
         font-size: 16px;
 
         font-weight: bold;
 
-        color: #111827;
+        line-height: 1.5;
 
         word-break: break-all;
-
-        line-height: 1.5;
       }
 
       .map {
@@ -130,9 +133,7 @@
 
         width: 100%;
 
-        text-align: center;
-
-        text-decoration: none;
+        margin-top: 12px;
 
         padding: 14px;
 
@@ -140,47 +141,21 @@
 
         background: #16a34a;
 
-        color: white;
+        color: #ffffff;
+
+        text-align: center;
+
+        text-decoration: none;
 
         font-weight: bold;
-
-        margin-top: 12px;
-      }
-
-      .map:hover {
-        background: #15803d;
-      }
-
-      .copy {
-        display: none;
-
-        width: 100%;
-
-        border: none;
-
-        padding: 15px;
-
-        border-radius: 12px;
-
-        background: #111827;
-
-        color: white;
-
-        font-size: 16px;
-
-        font-weight: bold;
-
-        cursor: pointer;
-
-        margin-top: 12px;
       }
 
       .sheet-status {
         display: none;
 
-        padding: 14px;
-
         margin-top: 12px;
+
+        padding: 14px;
 
         border-radius: 10px;
 
@@ -194,15 +169,21 @@
       }
 
       .small {
-        text-align: center;
+        margin-top: 18px;
 
         color: #64748b;
 
+        text-align: center;
+
         font-size: 12px;
 
-        margin-top: 18px;
-
         line-height: 1.5;
+      }
+
+      /* Hidden form used for Google Apps Script */
+
+      #sheetForm {
+        display: none;
       }
     </style>
   </head>
@@ -211,7 +192,7 @@
     <div class="card">
       <h2>📍 Automatic GPS Location</h2>
 
-      <div id="status" class="status">Starting GPS automatically...</div>
+      <div id="status" class="status">Starting GPS...</div>
 
       <div id="loading" class="loading">
         <div class="loader"></div>
@@ -222,51 +203,68 @@
       <div class="box">
         <span class="label"> Latitude </span>
 
-        <span class="value" id="lat"> --- </span>
+        <span id="lat" class="value"> --- </span>
       </div>
 
       <div class="box">
         <span class="label"> Longitude </span>
 
-        <span class="value" id="lon"> --- </span>
+        <span id="lon" class="value"> --- </span>
       </div>
 
       <div class="box">
         <span class="label"> GPS Accuracy </span>
 
-        <span class="value" id="accuracy"> --- </span>
+        <span id="accuracy" class="value"> --- </span>
       </div>
 
       <div class="box">
         <span class="label"> Best Reading </span>
 
-        <span class="value" id="reading"> --- </span>
+        <span id="reading" class="value"> --- </span>
       </div>
 
       <div class="box">
         <span class="label"> Google Maps URL </span>
 
-        <span class="value" id="mapUrl"> --- </span>
+        <span id="mapUrl" class="value"> --- </span>
       </div>
 
       <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
       <div id="sheetStatus" class="sheet-status"></div>
 
-      <button id="copyBtn" class="copy" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
+      <!--
+      Hidden form.
+      This sends the data directly to Apps Script.
+    -->
 
-      <div class="small">Location permission allow karna zaroori hai. GPS location milte hi data automatically Google Sheet me save hoga.</div>
+      <form id="sheetForm" method="POST" target="sheetFrame">
+        <input type="hidden" name="dateTime" id="formDateTime" />
+
+        <input type="hidden" name="latitude" id="formLatitude" />
+
+        <input type="hidden" name="longitude" id="formLongitude" />
+
+        <input type="hidden" name="accuracy" id="formAccuracy" />
+
+        <input type="hidden" name="mapsUrl" id="formMapsUrl" />
+      </form>
+
+      <iframe name="sheetFrame" id="sheetFrame" style="display: none"></iframe>
+
+      <div class="small">GPS location milte hi data automatically Google Sheet me save hoga.</div>
     </div>
 
     <script>
       /* =====================================================
-     GOOGLE APPS SCRIPT WEB APP
+     YOUR GOOGLE APPS SCRIPT WEB APP
   ===================================================== */
 
       const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
 
       /* =====================================================
-     GPS VARIABLES
+     GPS SETTINGS
   ===================================================== */
 
       let bestPosition = null;
@@ -282,20 +280,20 @@
       const MIN_ACCURACY = 10;
 
       /* =====================================================
-     PAGE LOAD
+     PAGE OPEN
   ===================================================== */
 
       window.addEventListener("load", function () {
-        console.log("Page loaded");
+        console.log("GPS page loaded");
 
-        getLocation();
+        startGPS();
       });
 
       /* =====================================================
-     GET GPS LOCATION
+     START GPS
   ===================================================== */
 
-      function getLocation() {
+      function startGPS() {
         const status = document.getElementById("status");
 
         const loading = document.getElementById("loading");
@@ -308,15 +306,23 @@
           return;
         }
 
+        /*
+      HTTPS CHECK
+    */
+
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
           loading.style.display = "none";
 
-          status.innerHTML = "⚠️ Location ke liye HTTPS required hai.";
+          status.innerHTML = "⚠️ GPS ke liye HTTPS required hai.";
 
           return;
         }
 
         status.innerHTML = "📡 Location permission maangi ja rahi hai...";
+
+        /*
+      START GPS WATCH
+    */
 
         watchId = navigator.geolocation.watchPosition(
           function (position) {
@@ -324,38 +330,36 @@
 
             const accuracy = position.coords.accuracy;
 
-            console.log("GPS Reading:", readings, "Accuracy:", accuracy);
+            console.log("GPS reading:", readings, "Accuracy:", accuracy);
 
             /*
-             BEST LOCATION
+            BEST LOCATION SELECT
           */
 
             if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
               bestPosition = position;
 
-              showPosition(position);
-
-              createMapURL(position);
+              showLocation(position);
 
               status.innerHTML = "📍 Location mil gayi. Accuracy improve ho rahi hai...";
             }
 
             /*
-             10 METER OR BETTER
+            EXCELLENT ACCURACY
           */
 
             if (accuracy <= MIN_ACCURACY) {
-              finishLocation();
+              finishGPS();
 
               return;
             }
 
             /*
-             MAX READINGS
+            MAX READINGS
           */
 
             if (readings >= MAX_READINGS) {
-              finishLocation();
+              finishGPS();
 
               return;
             }
@@ -364,14 +368,14 @@
           function (error) {
             loading.style.display = "none";
 
-            console.error("GPS Error:", error);
+            console.error("GPS ERROR:", error);
 
             if (error.code === 1) {
-              status.innerHTML = "❌ Location permission denied.<br><br>" + "Browser me Location → Allow karo.";
+              status.innerHTML = "❌ Location permission denied.<br><br>" + "Browser me Location Allow karo.";
             } else if (error.code === 2) {
-              status.innerHTML = "❌ Location unavailable.<br><br>" + "Phone ki Location/GPS ON karo.";
+              status.innerHTML = "❌ Location unavailable.<br><br>" + "Phone ki Location ON karo.";
             } else if (error.code === 3) {
-              status.innerHTML = "❌ GPS timeout.<br><br>" + "Open area me dobara try karo.";
+              status.innerHTML = "❌ GPS timeout.<br><br>" + "Open area me try karo.";
             } else {
               status.innerHTML = "❌ GPS location nahi mil saki.";
             }
@@ -388,10 +392,10 @@
       }
 
       /* =====================================================
-     SHOW POSITION
+     SHOW LOCATION
   ===================================================== */
 
-      function showPosition(position) {
+      function showLocation(position) {
         const latitude = position.coords.latitude;
 
         const longitude = position.coords.longitude;
@@ -405,24 +409,14 @@
         document.getElementById("accuracy").innerHTML = accuracy.toFixed(2) + " meters";
 
         document.getElementById("reading").innerHTML = readings + " / " + MAX_READINGS;
-      }
 
-      /* =====================================================
-     GOOGLE MAP URL
-  ===================================================== */
+        const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-      function createMapURL(position) {
-        const latitude = position.coords.latitude;
-
-        const longitude = position.coords.longitude;
-
-        const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
-
-        document.getElementById("mapUrl").innerHTML = url;
+        document.getElementById("mapUrl").innerHTML = mapsURL;
 
         const map = document.getElementById("map");
 
-        map.href = url;
+        map.href = mapsURL;
 
         map.style.display = "block";
       }
@@ -431,7 +425,7 @@
      FINISH GPS
   ===================================================== */
 
-      function finishLocation() {
+      function finishGPS() {
         if (watchId !== null) {
           navigator.geolocation.clearWatch(watchId);
 
@@ -442,12 +436,10 @@
 
         const status = document.getElementById("status");
 
-        const copyBtn = document.getElementById("copyBtn");
-
         loading.style.display = "none";
 
         if (!bestPosition) {
-          status.innerHTML = "❌ Location not found.";
+          status.innerHTML = "❌ Location nahi mili.";
 
           return;
         }
@@ -460,187 +452,97 @@
 
         const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-        document.getElementById("mapUrl").innerHTML = mapsURL;
-
-        const map = document.getElementById("map");
-
-        map.href = mapsURL;
-
-        map.style.display = "block";
-
-        copyBtn.style.display = "block";
-
         if (accuracy <= 10) {
           status.innerHTML = "✅ Excellent accuracy: " + accuracy.toFixed(2) + " meters";
         } else if (accuracy <= 30) {
           status.innerHTML = "✅ Good accuracy: " + accuracy.toFixed(2) + " meters";
         } else {
-          status.innerHTML = "⚠️ Location found. Accuracy: " + accuracy.toFixed(2) + " meters";
+          status.innerHTML = "⚠️ Location found: " + accuracy.toFixed(2) + " meters";
         }
 
-        console.log("FINAL LOCATION", latitude, longitude, accuracy, mapsURL);
-
         /*
-       AUTOMATIC GOOGLE SHEET SAVE
+      AUTOMATICALLY SAVE
     */
 
-        saveToGoogleSheet(latitude, longitude, accuracy, mapsURL);
+        saveToSheet(latitude, longitude, accuracy, mapsURL);
       }
 
       /* =====================================================
-     SAVE GOOGLE SHEET
+     SAVE TO GOOGLE SHEET
   ===================================================== */
 
-      function saveToGoogleSheet(latitude, longitude, accuracy, mapsURL) {
+      function saveToSheet(latitude, longitude, accuracy, mapsURL) {
         if (dataSaved) {
-          console.log("Data already saved.");
-
           return;
         }
 
         dataSaved = true;
 
-        const status = document.getElementById("sheetStatus");
+        const sheetStatus = document.getElementById("sheetStatus");
 
-        status.style.display = "block";
+        sheetStatus.style.display = "block";
 
-        status.style.background = "#eff6ff";
+        sheetStatus.style.background = "#eff6ff";
 
-        status.style.color = "#1d4ed8";
+        sheetStatus.style.color = "#1d4ed8";
 
-        status.innerHTML = "📤 Google Sheet me data save ho raha hai...";
+        sheetStatus.innerHTML = "📤 Google Sheet me data save ho raha hai...";
+
+        /*
+      DATE/TIME
+    */
 
         const dateTime = new Date().toLocaleString("en-IN");
 
         /*
-       IMPORTANT:
-       Apps Script expects mapsUrl
+      PUT DATA IN FORM
     */
 
-        const data = {
-          dateTime: dateTime,
+        document.getElementById("formDateTime").value = dateTime;
 
-          latitude: latitude.toFixed(8),
+        document.getElementById("formLatitude").value = latitude.toFixed(8);
 
-          longitude: longitude.toFixed(8),
+        document.getElementById("formLongitude").value = longitude.toFixed(8);
 
-          accuracy: accuracy.toFixed(2),
+        document.getElementById("formAccuracy").value = accuracy.toFixed(2);
 
-          mapsUrl: mapsURL,
-        };
-
-        console.log("Sending data:", data);
+        document.getElementById("formMapsUrl").value = mapsURL;
 
         /*
-       SEND REQUEST
+      SET FORM ACTION
     */
 
-        fetch(GOOGLE_SHEET_API, {
-          method: "POST",
+        const form = document.getElementById("sheetForm");
 
-          mode: "no-cors",
+        form.action = GOOGLE_SHEET_API;
 
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
+        /*
+      SUBMIT TO APPS SCRIPT
+    */
 
-          body: JSON.stringify(data),
-        })
-          .then(function () {
-            console.log("Google Sheet request sent.");
+        console.log("Sending data to Google Sheet...");
 
-            status.style.background = "#f0fdf4";
+        console.log({
+          dateTime: dateTime,
+          latitude: latitude,
+          longitude: longitude,
+          accuracy: accuracy,
+          mapsUrl: mapsURL,
+        });
 
-            status.style.color = "#15803d";
+        form.submit();
 
-            status.innerHTML =
-              "✅ <b>Data Google Sheet me send ho gaya.</b><br>" + "<small>" + "Date/Time, Latitude, Longitude, Accuracy aur Maps URL." + "</small>";
-          })
+        /*
+      SHOW SUCCESS AFTER REQUEST
+    */
 
-          .catch(function (error) {
-            console.error("Google Sheet Error:", error);
+        setTimeout(function () {
+          sheetStatus.style.background = "#f0fdf4";
 
-            dataSaved = false;
+          sheetStatus.style.color = "#15803d";
 
-            status.style.background = "#fef2f2";
-
-            status.style.color = "#dc2626";
-
-            status.innerHTML = "❌ Google Sheet data save nahi hua.";
-          });
-      }
-
-      /* =====================================================
-     COPY LOCATION
-  ===================================================== */
-
-      function copyLocation() {
-        if (!bestPosition) {
-          alert("Location available nahi hai.");
-
-          return;
-        }
-
-        const latitude = bestPosition.coords.latitude;
-
-        const longitude = bestPosition.coords.longitude;
-
-        const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard
-            .writeText(url)
-
-            .then(function () {
-              const button = document.getElementById("copyBtn");
-
-              button.innerHTML = "✅ Google Maps URL Copied!";
-
-              setTimeout(function () {
-                button.innerHTML = "📋 Copy Google Maps URL";
-              }, 2000);
-            })
-
-            .catch(function () {
-              fallbackCopy(url);
-            });
-        } else {
-          fallbackCopy(url);
-        }
-      }
-
-      /* =====================================================
-     FALLBACK COPY
-  ===================================================== */
-
-      function fallbackCopy(text) {
-        const textarea = document.createElement("textarea");
-
-        textarea.value = text;
-
-        textarea.style.position = "fixed";
-
-        textarea.style.left = "-9999px";
-
-        document.body.appendChild(textarea);
-
-        textarea.select();
-
-        try {
-          document.execCommand("copy");
-
-          const button = document.getElementById("copyBtn");
-
-          button.innerHTML = "✅ Google Maps URL Copied!";
-
-          setTimeout(function () {
-            button.innerHTML = "📋 Copy Google Maps URL";
-          }, 2000);
-        } catch (error) {
-          alert("Google Maps URL:\n\n" + text);
-        }
-
-        document.body.removeChild(textarea);
+          sheetStatus.innerHTML = "✅ <b>Data Google Sheet ko send kar diya gaya.</b>";
+        }, 1500);
       }
     </script>
   </body>
