@@ -446,122 +446,101 @@
    SAVE TO GOOGLE SHEET
 ========================================================= */
 
-      function saveToGoogleSheet() {
-        if (!bestPosition) {
-          alert("❌ Pehle GPS location allow karein.");
+      // function saveToGoogleSheet() {
+      if (!bestPosition) {
+        alert("❌ Pehle GPS location allow karein.");
 
-          return;
-        }
-
-        if (sheetAlreadySaved) {
-          alert("✅ Location already save ho chuki hai.");
-
-          return;
-        }
-
-        const latitude = bestPosition.coords.latitude;
-
-        const longitude = bestPosition.coords.longitude;
-
-        const accuracy = bestPosition.coords.accuracy;
-
-        const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
-
-        const dateTime = new Date().toLocaleString("en-IN");
-
-        const saveBtn = document.getElementById("saveBtn");
-
-        const sheetStatus = document.getElementById("sheetStatus");
-
-        /*
-    Button loading
-  */
-
-        saveBtn.disabled = true;
-
-        saveBtn.innerHTML = "⏳ Saving...";
-
-        sheetStatus.style.display = "block";
-
-        sheetStatus.style.background = "#eff6ff";
-
-        sheetStatus.style.color = "#1d4ed8";
-
-        sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
-
-        /*
-    IMPORTANT
-
-    Apps Script ke doPost()
-    ke saath same field names.
-  */
-
-        const data = {
-          dateTime: dateTime,
-
-          latitude: latitude.toFixed(8),
-
-          longitude: longitude.toFixed(8),
-
-          accuracy: accuracy.toFixed(2),
-
-          mapsURL: mapsURL,
-        };
-
-        console.log("Sending data:", data);
-
-        /*
-    GOOGLE APPS SCRIPT API
-  */
-
-        fetch(GOOGLE_SHEET_API, {
-          method: "POST",
-
-          mode: "no-cors",
-
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-
-          body: JSON.stringify(data),
-        })
-          .then(function () {
-            /*
-      no-cors response read nahi hota,
-      isliye request complete hone par
-      UI success dikhayenge.
-    */
-
-            sheetAlreadySaved = true;
-
-            saveBtn.disabled = true;
-
-            saveBtn.innerHTML = "✅ Saved to Google Sheet";
-
-            sheetStatus.style.background = "#f0fdf4";
-
-            sheetStatus.style.color = "#15803d";
-
-            sheetStatus.innerHTML =
-              "✅ <b>Location saved!</b><br>" + "<small>" + "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." + "</small>";
-
-            console.log("Google Sheet request completed.");
-          })
-
-          .catch(function (error) {
-            console.error("Google Sheet Error:", error);
-
-            saveBtn.disabled = false;
-
-            saveBtn.innerHTML = "💾 Save Location";
-
-            sheetStatus.style.background = "#fef2f2";
-
-            sheetStatus.style.color = "#dc2626";
-
-            sheetStatus.innerHTML = "❌ Data save nahi hua.<br>" + "<small>" + String(error) + "</small>";
-          });
+        return;
       }
+
+      if (sheetAlreadySaved) {
+        alert("✅ Location already save ho chuki hai.");
+
+        return;
+      }
+
+      const latitude = bestPosition.coords.latitude;
+
+      const longitude = bestPosition.coords.longitude;
+
+      const accuracy = bestPosition.coords.accuracy;
+
+      const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+      const dateTime = new Date().toLocaleString("en-IN");
+
+      const saveBtn = document.getElementById("saveBtn");
+
+      const sheetStatus = document.getElementById("sheetStatus");
+
+      saveBtn.disabled = true;
+
+      saveBtn.innerHTML = "⏳ Saving...";
+
+      sheetStatus.style.display = "block";
+
+      sheetStatus.style.background = "#eff6ff";
+
+      sheetStatus.style.color = "#1d4ed8";
+
+      sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
+
+      const data = {
+        dateTime: dateTime,
+
+        latitude: latitude.toFixed(8),
+
+        longitude: longitude.toFixed(8),
+
+        accuracy: accuracy.toFixed(2),
+
+        mapsURL: mapsURL,
+      };
+
+      console.log("Sending data:", data);
+
+      fetch(GOOGLE_SHEET_API, {
+        method: "POST",
+
+        mode: "no-cors",
+
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+
+        body: JSON.stringify(data),
+      })
+        .then(function () {
+          sheetAlreadySaved = true;
+
+          saveBtn.disabled = true;
+
+          saveBtn.innerHTML = "✅ Saved to Google Sheet";
+
+          sheetStatus.style.background = "#f0fdf4";
+
+          sheetStatus.style.color = "#15803d";
+
+          sheetStatus.innerHTML =
+            "✅ <b>Location saved!</b><br>" + "<small>" + "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." + "</small>";
+
+          console.log("Google Sheet request completed.");
+        })
+
+        .catch(function (error) {
+          console.error("Google Sheet Error:", error);
+
+          saveBtn.disabled = false;
+
+          saveBtn.innerHTML = "💾 Save Location";
+
+          sheetStatus.style.background = "#fef2f2";
+
+          sheetStatus.style.color = "#dc2626";
+
+          sheetStatus.innerHTML = "❌ Data save nahi hua.<br>" + "<small>" + String(error) + "</small>";
+        });
+      // }
 
       /* =========================================================
    COPY LOCATION
