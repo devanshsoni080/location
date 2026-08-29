@@ -19,107 +19,74 @@
         font-family: Arial, sans-serif;
         background: #f3f4f6;
         min-height: 100vh;
-
         display: flex;
         justify-content: center;
         align-items: center;
-
         padding: 20px;
       }
 
       .card {
         width: 100%;
         max-width: 420px;
-
-        background: white;
-
+        background: #fff;
         padding: 25px;
-
         border-radius: 20px;
-
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
       }
 
       h2 {
         text-align: center;
-
         margin: 0 0 25px;
-
         color: #111827;
       }
 
       .status {
         padding: 14px;
-
         background: #eff6ff;
-
         border-radius: 10px;
-
         text-align: center;
-
         color: #1d4ed8;
-
         font-size: 14px;
-
         margin-bottom: 18px;
-
         line-height: 1.5;
       }
 
       .box {
         background: #f8fafc;
-
         border: 1px solid #e5e7eb;
-
         padding: 15px;
-
         border-radius: 12px;
-
         margin-bottom: 12px;
       }
 
       .label {
         display: block;
-
         font-size: 13px;
-
         color: #64748b;
-
         margin-bottom: 6px;
       }
 
       .value {
         display: block;
-
         font-size: 16px;
-
         font-weight: bold;
-
         color: #111827;
-
         word-break: break-all;
-
         line-height: 1.5;
       }
 
       .loading {
         text-align: center;
-
         margin: 20px 0;
       }
 
       .loader {
         width: 40px;
         height: 40px;
-
         border: 4px solid #e5e7eb;
-
         border-top: 4px solid #2563eb;
-
         border-radius: 50%;
-
         animation: spin 1s linear infinite;
-
         margin: 0 auto 12px;
       }
 
@@ -129,26 +96,24 @@
         }
       }
 
-      .map {
+      .map,
+      .copy {
         display: none;
-
         width: 100%;
-
-        text-align: center;
-
-        text-decoration: none;
-
-        padding: 14px;
-
+        border: none;
+        padding: 15px;
         border-radius: 12px;
-
-        background: #16a34a;
-
         color: white;
-
+        font-size: 16px;
         font-weight: bold;
-
+        cursor: pointer;
         margin-top: 12px;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .map {
+        background: #16a34a;
       }
 
       .map:hover {
@@ -156,61 +121,30 @@
       }
 
       .copy {
-        display: none;
-
-        width: 100%;
-
-        border: none;
-
-        padding: 15px;
-
-        border-radius: 12px;
-
         background: #111827;
-
-        color: white;
-
-        font-size: 16px;
-
-        font-weight: bold;
-
-        cursor: pointer;
-
-        margin-top: 12px;
       }
 
       .copy:hover {
-        background: #000000;
+        background: #000;
       }
 
       .email-status,
       .sheet-status {
         display: none;
-
         padding: 14px;
-
         margin-top: 12px;
-
         border-radius: 10px;
-
         text-align: center;
-
         font-size: 13px;
-
         font-weight: bold;
-
         line-height: 1.5;
       }
 
       .small {
         text-align: center;
-
         color: #64748b;
-
         font-size: 12px;
-
         margin-top: 18px;
-
         line-height: 1.5;
       }
     </style>
@@ -224,64 +158,49 @@
 
       <div id="loading" class="loading">
         <div class="loader"></div>
-
         <div>Searching for GPS location...</div>
       </div>
 
       <!-- LATITUDE -->
-
       <div class="box">
-        <span class="label"> Latitude </span>
-
-        <span class="value" id="lat"> --- </span>
+        <span class="label">Latitude</span>
+        <span class="value" id="lat">---</span>
       </div>
 
       <!-- LONGITUDE -->
-
       <div class="box">
-        <span class="label"> Longitude </span>
-
-        <span class="value" id="lon"> --- </span>
+        <span class="label">Longitude</span>
+        <span class="value" id="lon">---</span>
       </div>
 
       <!-- ACCURACY -->
-
       <div class="box">
-        <span class="label"> GPS Accuracy </span>
-
-        <span class="value" id="accuracy"> --- </span>
+        <span class="label">GPS Accuracy</span>
+        <span class="value" id="accuracy">---</span>
       </div>
 
       <!-- READING -->
-
       <div class="box">
-        <span class="label"> Best Reading </span>
-
-        <span class="value" id="reading"> --- </span>
+        <span class="label">Best Reading</span>
+        <span class="value" id="reading">---</span>
       </div>
 
       <!-- MAP URL -->
-
       <div class="box">
-        <span class="label"> Google Maps URL </span>
-
-        <span class="value" id="mapUrl"> --- </span>
+        <span class="label">Google Maps URL</span>
+        <span class="value" id="mapUrl">---</span>
       </div>
 
       <!-- EMAIL STATUS -->
-
       <div id="emailStatus" class="email-status"></div>
 
       <!-- SHEET STATUS -->
-
       <div id="sheetStatus" class="sheet-status"></div>
 
-      <!-- MAP -->
-
+      <!-- MAP BUTTON -->
       <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
-      <!-- COPY -->
-
+      <!-- COPY BUTTON -->
       <button id="copyBtn" class="copy" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
 
       <div class="small">GPS accuracy depends on your device and surroundings. Outdoor GPS generally provides better accuracy.</div>
@@ -299,7 +218,7 @@
       const EMAILJS_TEMPLATE_ID = "template_mo5otps";
 
       /* =====================================================
-   GOOGLE SHEET API
+   GOOGLE APPS SCRIPT WEB APP
 ===================================================== */
 
       const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbzjwuXfrjljvLQwhEIlfuIdU624mluPEDBKUgULyvdG9dXEMmpLRFroaqovImq6x-56/exec";
@@ -317,7 +236,7 @@
       }
 
       /* =====================================================
-   GPS VARIABLES
+   GPS SETTINGS
 ===================================================== */
 
       let bestPosition = null;
@@ -345,7 +264,7 @@
       });
 
       /* =====================================================
-   GET HIGH ACCURACY LOCATION
+   GET GPS LOCATION
 ===================================================== */
 
       function getHighAccuracyLocation() {
@@ -356,10 +275,6 @@
         const map = document.getElementById("map");
 
         const copyBtn = document.getElementById("copyBtn");
-
-        const sheetStatus = document.getElementById("sheetStatus");
-
-        /* RESET */
 
         bestPosition = null;
 
@@ -385,9 +300,9 @@
 
         loading.style.display = "block";
 
-        sheetStatus.style.display = "none";
+        document.getElementById("emailStatus").style.display = "none";
 
-        sheetStatus.innerHTML = "";
+        document.getElementById("sheetStatus").style.display = "none";
 
         /* GPS SUPPORT */
 
@@ -404,14 +319,16 @@
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
           loading.style.display = "none";
 
-          status.innerHTML = "⚠️ Location ke liye HTTPS ya localhost required hai.";
+          status.innerHTML = "⚠️ Location ke liye HTTPS required hai.";
 
           return;
         }
 
         status.innerHTML = "📡 GPS permission request ho rahi hai...";
 
-        /* START GPS */
+        /* =====================================================
+     WATCH GPS
+  ===================================================== */
 
         watchId = navigator.geolocation.watchPosition(
           function (position) {
@@ -421,7 +338,7 @@
 
             console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
 
-            /* BEST POSITION */
+            /* BEST READING */
 
             if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
               bestPosition = position;
@@ -430,10 +347,10 @@
 
               createGoogleMapsURL(position);
 
-              status.innerHTML = "📍 Location found. Accuracy improve ho rahi hai...";
+              status.innerHTML = "📍 Location found.<br>" + "Accuracy improve ho rahi hai...";
             }
 
-            /* EXCELLENT ACCURACY */
+            /* 10 METER ACCURACY */
 
             if (currentAccuracy <= MIN_ACCURACY) {
               finishLocation();
@@ -441,7 +358,7 @@
               return;
             }
 
-            /* MAX READINGS */
+            /* MAX 10 READINGS */
 
             if (readings >= MAX_READINGS) {
               finishLocation();
@@ -458,7 +375,7 @@
             if (error.code === 1) {
               status.innerHTML = "❌ Location permission denied.<br><br>" + "Chrome me Location → Allow karo.";
             } else if (error.code === 2) {
-              status.innerHTML = "❌ Location unavailable.<br><br>" + "Phone ki GPS/Location service ON karo.";
+              status.innerHTML = "❌ Location unavailable.<br><br>" + "Phone ki Location service ON karo.";
             } else if (error.code === 3) {
               status.innerHTML = "❌ GPS timeout.<br><br>" + "Open area me dobara try karo.";
             } else {
@@ -468,9 +385,7 @@
 
           {
             enableHighAccuracy: true,
-
             timeout: 30000,
-
             maximumAge: 0,
           },
         );
@@ -561,7 +476,7 @@
 
         copyBtn.style.display = "block";
 
-        /* ACCURACY MESSAGE */
+        /* ACCURACY STATUS */
 
         if (accuracy <= 10) {
           status.innerHTML = "✅ Excellent accuracy: " + accuracy.toFixed(2) + " meters";
@@ -581,11 +496,13 @@
 
         console.log("Maps:", mapsURL);
 
-        /* =================================================
+        /* =====================================================
      AUTOMATIC GOOGLE SHEET SAVE
-  ================================================= */
+     
+     GPS FINISH HONE KE BAAD AUTOMATIC CALL
+  ===================================================== */
 
-        saveToGoogleSheet(latitude, longitude, accuracy, mapsURL);
+        saveToGoogleSheet();
 
         /* EMAIL */
 
@@ -596,16 +513,28 @@
    AUTOMATIC SAVE TO GOOGLE SHEET
 ===================================================== */
 
-      function saveToGoogleSheet(latitude, longitude, accuracy, mapsURL) {
-        /* DUPLICATE PROTECTION */
-
-        if (sheetAlreadySaved) {
-          console.log("Sheet data already saved.");
+      function saveToGoogleSheet() {
+        if (!bestPosition) {
+          console.log("❌ Location available nahi hai.");
 
           return;
         }
 
-        sheetAlreadySaved = true;
+        if (sheetAlreadySaved) {
+          console.log("✅ Data already saved.");
+
+          return;
+        }
+
+        const latitude = bestPosition.coords.latitude;
+
+        const longitude = bestPosition.coords.longitude;
+
+        const accuracy = bestPosition.coords.accuracy;
+
+        const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+        const dateTime = new Date().toLocaleString("en-IN");
 
         const sheetStatus = document.getElementById("sheetStatus");
 
@@ -615,16 +544,7 @@
 
         sheetStatus.style.color = "#1d4ed8";
 
-        sheetStatus.innerHTML = "📤 Location Google Sheet me save ho rahi hai...";
-
-        /* DATE TIME */
-
-        const dateTime = new Date().toLocaleString("en-IN");
-
-        /* IMPORTANT:
-     mapsUrl exactly same name
-     Apps Script me bhi mapsUrl hai.
-  */
+        sheetStatus.innerHTML = "📤 Data Google Sheet me save ho raha hai...";
 
         const data = {
           dateTime: dateTime,
@@ -635,12 +555,14 @@
 
           accuracy: accuracy.toFixed(2),
 
-          mapsUrl: mapsURL,
+          mapsURL: mapsURL,
         };
 
-        console.log("📤 Sending Sheet Data:", data);
+        console.log("📤 Sending data to Google Sheet:", data);
 
-        /* POST REQUEST */
+        /* =====================================================
+     API REQUEST
+  ===================================================== */
 
         fetch(GOOGLE_SHEET_API, {
           method: "POST",
@@ -654,31 +576,29 @@
           body: JSON.stringify(data),
         })
           .then(function () {
-            console.log("✅ Google Sheet request sent");
+            sheetAlreadySaved = true;
 
             sheetStatus.style.background = "#f0fdf4";
 
             sheetStatus.style.color = "#15803d";
 
             sheetStatus.innerHTML =
-              "✅ <b>Location Google Sheet me save ho gayi!</b><br>" +
+              "✅ <b>Data Google Sheet me save ho gaya!</b><br>" +
               "<small>" +
-              "Date/Time, Latitude, Longitude, Accuracy aur Google Maps URL save kiya gaya." +
+              "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." +
               "</small>";
+
+            console.log("✅ Google Sheet request sent.");
           })
 
           .catch(function (error) {
-            console.error("❌ Google Sheet Error:", error);
-
-            /* Allow retry if request failed */
-
-            sheetAlreadySaved = false;
+            console.error("❌ Google Sheet error:", error);
 
             sheetStatus.style.background = "#fef2f2";
 
             sheetStatus.style.color = "#dc2626";
 
-            sheetStatus.innerHTML = "❌ <b>Google Sheet me data save nahi hua.</b><br>" + "<small>" + String(error) + "</small>";
+            sheetStatus.innerHTML = "❌ Google Sheet me data save nahi hua.";
           });
       }
 
@@ -728,7 +648,7 @@
           .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
 
           .then(function (response) {
-            console.log("✅ EMAIL SENT", response.status, response.text);
+            console.log("✅ EMAIL SENT", response.status);
 
             emailStatus.style.background = "#f0fdf4";
 
@@ -751,7 +671,7 @@
       }
 
       /* =====================================================
-   COPY LOCATION
+   COPY GOOGLE MAPS URL
 ===================================================== */
 
       function copyLocation() {
