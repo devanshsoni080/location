@@ -19,107 +19,74 @@
         font-family: Arial, sans-serif;
         background: #f3f4f6;
         min-height: 100vh;
-
         display: flex;
         justify-content: center;
         align-items: center;
-
         padding: 20px;
       }
 
       .card {
         width: 100%;
         max-width: 420px;
-
         background: white;
-
         padding: 25px;
-
         border-radius: 20px;
-
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
       }
 
       h2 {
         text-align: center;
-
         margin: 0 0 25px;
-
         color: #111827;
       }
 
       .status {
         padding: 14px;
-
         background: #eff6ff;
-
         border-radius: 10px;
-
         text-align: center;
-
         color: #1d4ed8;
-
         font-size: 14px;
-
         margin-bottom: 18px;
-
         line-height: 1.5;
       }
 
       .box {
         background: #f8fafc;
-
         border: 1px solid #e5e7eb;
-
         padding: 15px;
-
         border-radius: 12px;
-
         margin-bottom: 12px;
       }
 
       .label {
         display: block;
-
         font-size: 13px;
-
         color: #64748b;
-
         margin-bottom: 6px;
       }
 
       .value {
         display: block;
-
         font-size: 16px;
-
         font-weight: bold;
-
         color: #111827;
-
         word-break: break-all;
-
         line-height: 1.5;
       }
 
       .loading {
         text-align: center;
-
         margin: 20px 0;
       }
 
       .loader {
         width: 40px;
         height: 40px;
-
         border: 4px solid #e5e7eb;
-
         border-top: 4px solid #2563eb;
-
         border-radius: 50%;
-
         animation: spin 1s linear infinite;
-
         margin: 0 auto 12px;
       }
 
@@ -129,25 +96,18 @@
         }
       }
 
+      /* MAP BUTTON */
+
       .map {
         display: none;
-
         width: 100%;
-
         text-align: center;
-
         text-decoration: none;
-
         padding: 14px;
-
         border-radius: 12px;
-
         background: #16a34a;
-
         color: white;
-
         font-weight: bold;
-
         margin-top: 12px;
       }
 
@@ -155,27 +115,44 @@
         background: #15803d;
       }
 
+      /* SAVE BUTTON */
+
+      .save {
+        display: none;
+        width: 100%;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        background: #2563eb;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 12px;
+      }
+
+      .save:hover {
+        background: #1d4ed8;
+      }
+
+      .save:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      /* COPY BUTTON */
+
       .copy {
         display: none;
-
         width: 100%;
-
         border: none;
-
         padding: 15px;
-
         border-radius: 12px;
-
         background: #111827;
-
         color: white;
-
         font-size: 16px;
-
         font-weight: bold;
-
         cursor: pointer;
-
         margin-top: 12px;
       }
 
@@ -183,34 +160,37 @@
         background: #000000;
       }
 
-      .email-status,
+      /* EMAIL STATUS */
+
+      .email-status {
+        display: none;
+        padding: 14px;
+        margin-top: 12px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 1.5;
+      }
+
+      /* SHEET STATUS */
+
       .sheet-status {
         display: none;
-
         padding: 14px;
-
         margin-top: 12px;
-
         border-radius: 10px;
-
         text-align: center;
-
         font-size: 13px;
-
         font-weight: bold;
-
         line-height: 1.5;
       }
 
       .small {
         text-align: center;
-
         color: #64748b;
-
         font-size: 12px;
-
         margin-top: 18px;
-
         line-height: 1.5;
       }
     </style>
@@ -224,61 +204,59 @@
 
       <div id="loading" class="loading">
         <div class="loader"></div>
-
         <div>Searching for GPS location...</div>
       </div>
 
       <!-- LATITUDE -->
 
       <div class="box">
-        <span class="label"> Latitude </span>
-
-        <span class="value" id="lat"> --- </span>
+        <span class="label">Latitude</span>
+        <span class="value" id="lat">---</span>
       </div>
 
       <!-- LONGITUDE -->
 
       <div class="box">
-        <span class="label"> Longitude </span>
-
-        <span class="value" id="lon"> --- </span>
+        <span class="label">Longitude</span>
+        <span class="value" id="lon">---</span>
       </div>
 
       <!-- ACCURACY -->
 
       <div class="box">
-        <span class="label"> GPS Accuracy </span>
-
-        <span class="value" id="accuracy"> --- </span>
+        <span class="label">GPS Accuracy</span>
+        <span class="value" id="accuracy">---</span>
       </div>
 
       <!-- READING -->
 
       <div class="box">
-        <span class="label"> Best Reading </span>
-
-        <span class="value" id="reading"> --- </span>
+        <span class="label">Best Reading</span>
+        <span class="value" id="reading">---</span>
       </div>
 
       <!-- MAP URL -->
 
       <div class="box">
-        <span class="label"> Google Maps URL </span>
-
-        <span class="value" id="mapUrl"> --- </span>
+        <span class="label">Google Maps URL</span>
+        <span class="value" id="mapUrl">---</span>
       </div>
 
       <!-- EMAIL STATUS -->
 
       <div id="emailStatus" class="email-status"></div>
 
+      <!-- MAP BUTTON -->
+
+      <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
+
+      <!-- SAVE TO GOOGLE SHEET -->
+
+      <button id="saveBtn" class="save" type="button" onclick="saveToGoogleSheet()">💾 Save Data to Google Sheet</button>
+
       <!-- SHEET STATUS -->
 
       <div id="sheetStatus" class="sheet-status"></div>
-
-      <!-- MAP -->
-
-      <a id="map" class="map" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
       <!-- COPY -->
 
@@ -289,8 +267,8 @@
 
     <script>
       /* =====================================================
-   EMAILJS SETTINGS
-===================================================== */
+         EMAILJS SETTINGS
+      ===================================================== */
 
       const EMAILJS_PUBLIC_KEY = "b4rIp_19YUjN7ILDd";
 
@@ -299,14 +277,14 @@
       const EMAILJS_TEMPLATE_ID = "template_mo5otps";
 
       /* =====================================================
-   GOOGLE SHEET API
-===================================================== */
+         GOOGLE APPS SCRIPT WEB APP URL
+      ===================================================== */
 
       const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby7Byu97Hn3D9lb_whmCH9VmYTSuASvyjDH4xm07c7-MZ4oRY8vgAmqhlc8UW4t0YNC/exec";
 
       /* =====================================================
-   EMAILJS INITIALIZE
-===================================================== */
+         EMAILJS INITIALIZE
+      ===================================================== */
 
       if (typeof emailjs !== "undefined") {
         emailjs.init({
@@ -317,8 +295,8 @@
       }
 
       /* =====================================================
-   GPS VARIABLES
-===================================================== */
+         GPS SETTINGS
+      ===================================================== */
 
       let bestPosition = null;
 
@@ -335,8 +313,8 @@
       const MIN_ACCURACY = 10;
 
       /* =====================================================
-   PAGE LOAD
-===================================================== */
+         START GPS
+      ===================================================== */
 
       window.addEventListener("load", function () {
         console.log("🚀 Page loaded");
@@ -345,8 +323,8 @@
       });
 
       /* =====================================================
-   GET HIGH ACCURACY LOCATION
-===================================================== */
+         GET LOCATION
+      ===================================================== */
 
       function getHighAccuracyLocation() {
         const status = document.getElementById("status");
@@ -355,9 +333,9 @@
 
         const map = document.getElementById("map");
 
-        const copyBtn = document.getElementById("copyBtn");
+        const saveBtn = document.getElementById("saveBtn");
 
-        const sheetStatus = document.getElementById("sheetStatus");
+        const copyBtn = document.getElementById("copyBtn");
 
         /* RESET */
 
@@ -381,15 +359,29 @@
 
         map.style.display = "none";
 
+        saveBtn.style.display = "none";
+
         copyBtn.style.display = "none";
 
         loading.style.display = "block";
+
+        /* RESET EMAIL STATUS */
+
+        const emailStatus = document.getElementById("emailStatus");
+
+        emailStatus.style.display = "none";
+
+        emailStatus.innerHTML = "";
+
+        /* RESET SHEET STATUS */
+
+        const sheetStatus = document.getElementById("sheetStatus");
 
         sheetStatus.style.display = "none";
 
         sheetStatus.innerHTML = "";
 
-        /* GPS SUPPORT */
+        /* CHECK GPS */
 
         if (!navigator.geolocation) {
           loading.style.display = "none";
@@ -399,7 +391,7 @@
           return;
         }
 
-        /* HTTPS */
+        /* HTTPS CHECK */
 
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
           loading.style.display = "none";
@@ -411,7 +403,7 @@
 
         status.innerHTML = "📡 GPS permission request ho rahi hai...";
 
-        /* START GPS */
+        /* START WATCH */
 
         watchId = navigator.geolocation.watchPosition(
           function (position) {
@@ -421,7 +413,7 @@
 
             console.log("GPS Reading:", readings, "Accuracy:", currentAccuracy);
 
-            /* BEST POSITION */
+            /* BEST LOCATION */
 
             if (bestPosition === null || currentAccuracy < bestPosition.coords.accuracy) {
               bestPosition = position;
@@ -431,9 +423,22 @@
               createGoogleMapsURL(position);
 
               status.innerHTML = "📍 Location found. Accuracy improve ho rahi hai...";
+
+              /* =========================================
+     SAVE BUTTON SHOW
+     GPS LOCATION MILTE HI BUTTON DIKHEGA
+  ========================================= */
+
+              const saveBtn = document.getElementById("saveBtn");
+
+              if (saveBtn) {
+                saveBtn.style.display = "block";
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = "💾 Save Data to Google Sheet";
+              }
             }
 
-            /* EXCELLENT ACCURACY */
+            /* EXCELLENT */
 
             if (currentAccuracy <= MIN_ACCURACY) {
               finishLocation();
@@ -477,8 +482,8 @@
       }
 
       /* =====================================================
-   SHOW POSITION
-===================================================== */
+         SHOW POSITION
+      ===================================================== */
 
       function showPosition(position) {
         const latitude = position.coords.latitude;
@@ -497,8 +502,8 @@
       }
 
       /* =====================================================
-   GOOGLE MAP URL
-===================================================== */
+         GOOGLE MAP URL
+      ===================================================== */
 
       function createGoogleMapsURL(position) {
         const latitude = position.coords.latitude;
@@ -517,8 +522,8 @@
       }
 
       /* =====================================================
-   FINISH GPS
-===================================================== */
+         FINISH LOCATION
+      ===================================================== */
 
       function finishLocation() {
         /* STOP GPS */
@@ -534,6 +539,8 @@
         const status = document.getElementById("status");
 
         const copyBtn = document.getElementById("copyBtn");
+
+        const saveBtn = document.getElementById("saveBtn");
 
         loading.style.display = "none";
 
@@ -559,9 +566,15 @@
 
         map.style.display = "block";
 
+        /* SHOW SAVE BUTTON */
+
+        saveBtn.style.display = "block";
+
+        /* SHOW COPY BUTTON */
+
         copyBtn.style.display = "block";
 
-        /* ACCURACY MESSAGE */
+        /* ACCURACY */
 
         if (accuracy <= 10) {
           status.innerHTML = "✅ Excellent accuracy: " + accuracy.toFixed(2) + " meters";
@@ -581,33 +594,54 @@
 
         console.log("Maps:", mapsURL);
 
-        /* =================================================
-     AUTOMATIC GOOGLE SHEET SAVE
-  ================================================= */
-
-        saveToGoogleSheet(latitude, longitude, accuracy, mapsURL);
-
-        /* EMAIL */
+        /* EMAIL OPTIONAL */
 
         sendLocationEmail(latitude, longitude, accuracy, mapsURL);
       }
 
       /* =====================================================
-   AUTOMATIC SAVE TO GOOGLE SHEET
-===================================================== */
+         SAVE DATA TO GOOGLE SHEET
+         
+         IMPORTANT:
+         API CALL SIRF BUTTON CLICK PAR HOGI.
+      ===================================================== */
 
-      function saveToGoogleSheet(latitude, longitude, accuracy, mapsURL) {
-        /* DUPLICATE PROTECTION */
+      function saveToGoogleSheet() {
+        /* CHECK LOCATION */
 
-        if (sheetAlreadySaved) {
-          console.log("Sheet data already saved.");
+        if (!bestPosition) {
+          alert("❌ Pehle GPS location complete hone do.");
 
           return;
         }
 
-        sheetAlreadySaved = true;
+        /* DUPLICATE CHECK */
+
+        if (sheetAlreadySaved) {
+          alert("✅ Ye location already Google Sheet me save ho chuki hai.");
+
+          return;
+        }
+
+        const latitude = bestPosition.coords.latitude;
+
+        const longitude = bestPosition.coords.longitude;
+
+        const accuracy = bestPosition.coords.accuracy;
+
+        const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+        const dateTime = new Date().toLocaleString("en-IN");
+
+        const saveBtn = document.getElementById("saveBtn");
 
         const sheetStatus = document.getElementById("sheetStatus");
+
+        /* BUTTON LOADING */
+
+        saveBtn.disabled = true;
+
+        saveBtn.innerHTML = "⏳ Saving to Google Sheet...";
 
         sheetStatus.style.display = "block";
 
@@ -615,16 +649,9 @@
 
         sheetStatus.style.color = "#1d4ed8";
 
-        sheetStatus.innerHTML = "📤 Location Google Sheet me save ho rahi hai...";
+        sheetStatus.innerHTML = "📤 Data Google Sheet me save ho raha hai...";
 
-        /* DATE TIME */
-
-        const dateTime = new Date().toLocaleString("en-IN");
-
-        /* IMPORTANT:
-     mapsUrl exactly same name
-     Apps Script me bhi mapsUrl hai.
-  */
+        /* DATA */
 
         const data = {
           dateTime: dateTime,
@@ -635,12 +662,12 @@
 
           accuracy: accuracy.toFixed(2),
 
-          mapsUrl: mapsURL,
+          mapsURL: mapsURL,
         };
 
         console.log("📤 Sending Sheet Data:", data);
 
-        /* POST REQUEST */
+        /* API CALL */
 
         fetch(GOOGLE_SHEET_API, {
           method: "POST",
@@ -654,37 +681,48 @@
           body: JSON.stringify(data),
         })
           .then(function () {
-            console.log("✅ Google Sheet request sent");
+            /*
+           no-cors me response read nahi kar sakte,
+           lekin request successfully send ho chuki hoti hai.
+          */
+
+            sheetAlreadySaved = true;
+
+            saveBtn.disabled = true;
+
+            saveBtn.innerHTML = "✅ Data Saved to Google Sheet";
 
             sheetStatus.style.background = "#f0fdf4";
 
             sheetStatus.style.color = "#15803d";
 
             sheetStatus.innerHTML =
-              "✅ <b>Location Google Sheet me save ho gayi!</b><br>" +
+              "✅ <b>Data Google Sheet me save ho gaya!</b><br>" +
               "<small>" +
               "Date/Time, Latitude, Longitude, Accuracy aur Google Maps URL save kiya gaya." +
               "</small>";
+
+            console.log("✅ Sheet API request sent.");
           })
 
           .catch(function (error) {
-            console.error("❌ Google Sheet Error:", error);
+            console.error("❌ Sheet API Error:", error);
 
-            /* Allow retry if request failed */
+            saveBtn.disabled = false;
 
-            sheetAlreadySaved = false;
+            saveBtn.innerHTML = "💾 Save Data to Google Sheet";
 
             sheetStatus.style.background = "#fef2f2";
 
             sheetStatus.style.color = "#dc2626";
 
-            sheetStatus.innerHTML = "❌ <b>Google Sheet me data save nahi hua.</b><br>" + "<small>" + String(error) + "</small>";
+            sheetStatus.innerHTML = "❌ Data Google Sheet me save nahi hua.<br>" + "<small>" + String(error) + "</small>";
           });
       }
 
       /* =====================================================
-   EMAILJS
-===================================================== */
+         EMAILJS
+      ===================================================== */
 
       function sendLocationEmail(latitude, longitude, accuracy, mapsURL) {
         if (emailAlreadySent) {
@@ -751,8 +789,8 @@
       }
 
       /* =====================================================
-   COPY LOCATION
-===================================================== */
+         COPY LOCATION
+      ===================================================== */
 
       function copyLocation() {
         if (!bestPosition) {
@@ -791,8 +829,8 @@
       }
 
       /* =====================================================
-   FALLBACK COPY
-===================================================== */
+         FALLBACK COPY
+      ===================================================== */
 
       function fallbackCopy(text) {
         const textarea = document.createElement("textarea");
