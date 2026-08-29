@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 20px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+h2 {
+  text-align: center;
+  margin: 0 0 20px;
+  color: #111827;
+}
+
+.status {
+  padding: 14px;
+
+  background: #eff6ff;
+
+  border-radius: 10px;
+
+  text-align: center;
+
+  color: #1d4ed8;
+
+  font-size: 14px;
+
+  margin-bottom: 18px;
+
+  line-height: 1.5;
+}
+
+.box {
+  background: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+
+  padding: 15px;
+
+  border-radius: 12px;
+
+  margin-bottom: 12px;
+}
+
+.label {
+  display: block;
+
+  font-size: 13px;
+
+  color: #64748b;
+
+  margin-bottom: 6px;
+}
+
+.value {
+  display: block;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  color: #111827;
+
+  word-break: break-all;
+
+  line-height: 1.5;
+}
+
+.map-btn,
+.copy-btn {
+  display: none;
+
+  width: 100%;
+
+  border: none;
+
+  padding: 15px;
+
+  border-radius: 12px;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  margin-top: 12px;
+
+  text-align: center;
+
+  text-decoration: none;
+}
+
+.map-btn {
+  background: #16a34a;
+}
+
+.map-btn:hover {
+  background: #15803d;
+}
+
+.copy-btn {
+  background: #111827;
+}
+
+.copy-btn:hover {
+  background: #000000;
+}
+
+.sheet-status {
+  display: none;
+
+  padding: 14px;
+
+  margin-top: 12px;
+
+  border-radius: 10px;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  line-height: 1.5;
+}
+
+.small {
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 12px;
+
+  margin-top: 18px;
+
+  line-height: 1.5;
+}
+.dis {
+  display: none;
+}

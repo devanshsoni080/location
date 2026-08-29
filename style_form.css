@@ -1,0 +1,499 @@
+  :root {
+        --blue: #2874f0;
+        --dark-blue: #0f4bbd;
+        --yellow: #ffe500;
+        --light-blue: #eaf3ff;
+        --green: #16a34a;
+        --text: #172033;
+        --muted: #697386;
+        --border: #e5e9f0;
+        --bg: #f5f7fb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      /* =========================
+         NAVBAR
+      ========================= */
+
+      .main-navbar {
+        background: var(--blue);
+        min-height: 70px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.14);
+      }
+
+      .brand-logo {
+        width: 46px;
+        height: 46px;
+        background: var(--yellow);
+        color: var(--blue);
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 900;
+        font-style: italic;
+      }
+
+      .brand-title {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 22px;
+      }
+
+      .brand-subtitle {
+        font-size: 11px;
+        opacity: 0.85;
+      }
+
+      .profile-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .profile-name {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .profile-status {
+        font-size: 11px;
+        opacity: 0.8;
+      }
+
+      /* =========================
+         MAIN
+      ========================= */
+
+      .main-container {
+        max-width: 1180px;
+      }
+
+      /* =========================
+         HERO
+      ========================= */
+
+      .hero {
+        background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+        border-radius: 18px;
+        color: white;
+        box-shadow: 0 10px 30px rgba(40, 116, 240, 0.22);
+      }
+
+      .hero h1 {
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .hero p {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .hero-date {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 11px 15px;
+        font-size: 13px;
+      }
+
+      /* =========================
+         COMMON CARD
+      ========================= */
+
+      .dashboard-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.045);
+      }
+
+      .section-title {
+        font-size: 19px;
+        font-weight: 700;
+      }
+
+      .section-subtitle {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      /* =========================
+         ORDER INPUT
+      ========================= */
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        z-index: 5;
+      }
+
+      .order-input {
+        height: 54px;
+        border: 1px solid #d9dee8;
+        border-radius: 12px;
+        padding-left: 43px;
+        font-size: 15px;
+      }
+
+      .order-input:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
+      }
+
+      .calculate-btn {
+        height: 54px;
+        border: none;
+        border-radius: 12px;
+        background: var(--blue);
+        font-size: 15px;
+        font-weight: 700;
+        transition: 0.2s;
+      }
+
+      .calculate-btn:hover {
+        background: var(--dark-blue);
+        transform: translateY(-1px);
+      }
+
+      /* =========================
+         PROGRESS
+      ========================= */
+
+      .progress {
+        height: 14px;
+        background: #edf1f7;
+        border-radius: 30px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        background: linear-gradient(90deg, var(--blue), #43a5ff);
+        border-radius: 30px;
+        transition: width 0.5s ease;
+      }
+
+      .progress-number {
+        color: var(--blue);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .target {
+        color: var(--green);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      /* =========================
+         SLAB
+      ========================= */
+
+      .slab-title {
+        font-size: 19px;
+        font-weight: 700;
+      }
+
+      .slab-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #fff8d7;
+        color: #a97900;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .table {
+        margin-bottom: 0;
+      }
+
+      .table thead th {
+        background: #f7f9fc;
+        color: #667085;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 15px 14px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      .table tbody td {
+        padding: 15px 14px;
+        font-size: 14px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf0f4;
+      }
+
+      .table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .order-range {
+        font-weight: 700;
+      }
+
+      .incentive {
+        color: var(--green);
+        font-weight: 800;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 20px;
+        background: #eaf8ef;
+        color: #15803d;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      #slabTable tr.active-row {
+        background: var(--light-blue) !important;
+        box-shadow: inset 0 0 0 1px rgba(40, 116, 240, 0.08);
+      }
+
+      #slabTable tr.active-row td {
+        background: var(--light-blue) !important;
+        font-weight: 700;
+      }
+
+      #slabTable tr.active-row td:first-child {
+        border-left: 4px solid var(--blue) !important;
+        padding-left: 10px;
+      }
+
+      #slabTable tr.active-row .order-range {
+        color: #172033;
+        font-weight: 800;
+      }
+
+      #slabTable tr.active-row .incentive {
+        color: var(--green);
+        font-weight: 900;
+      }
+
+      #slabTable .active-status {
+        background: var(--blue) !important;
+        color: white !important;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(40, 116, 240, 0.22);
+      }
+
+      /* =========================
+         BECOME A PARTNER
+      ========================= */
+
+      .partner-section {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff, #f7fbff);
+      }
+
+      .partner-header {
+        background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+        color: #fff;
+        border-radius: 15px;
+        padding: 25px;
+      }
+
+      .partner-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .partner-header p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      .partner-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        flex-shrink: 0;
+      }
+
+      .form-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #344054;
+        margin-bottom: 7px;
+      }
+
+      .partner-form .form-control,
+      .partner-form .form-select {
+        min-height: 48px;
+        border: 1px solid #d9dee8;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+
+      .partner-form textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .partner-form .form-control:focus,
+      .partner-form .form-select:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
+      }
+
+      .partner-submit {
+        min-height: 50px;
+        border: none;
+        border-radius: 11px;
+        background: var(--blue);
+        color: white;
+        font-weight: 700;
+        padding: 0 25px;
+        transition: 0.2s;
+      }
+
+      .partner-submit:hover {
+        background: var(--dark-blue);
+        transform: translateY(-1px);
+      }
+
+      .partner-benefits {
+        background: #f7f9fc;
+        border-radius: 12px;
+        padding: 15px;
+      }
+
+      .benefit-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 12px;
+        color: #475467;
+        margin-bottom: 9px;
+      }
+
+      .benefit-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .benefit-item i {
+        color: var(--green);
+        font-size: 15px;
+      }
+
+      /* =========================
+         FOOTER
+      ========================= */
+
+      .footer {
+        color: #8b95a7;
+        font-size: 12px;
+      }
+
+      /* =========================
+         MOBILE
+      ========================= */
+
+      @media (max-width: 767px) {
+        .main-navbar {
+          min-height: 64px;
+        }
+
+        .brand-logo {
+          width: 40px;
+          height: 40px;
+          font-size: 19px;
+        }
+
+        .brand-title {
+          font-size: 16px;
+        }
+
+        .brand-subtitle {
+          font-size: 10px;
+        }
+
+        .profile-text {
+          display: none;
+        }
+
+        .hero {
+          border-radius: 15px;
+        }
+
+        .hero h1 {
+          font-size: 23px;
+        }
+
+        .hero p {
+          font-size: 13px;
+        }
+
+        .dashboard-card {
+          border-radius: 15px;
+        }
+
+        .table {
+          min-width: 650px;
+        }
+
+        .calculate-btn {
+          width: 100%;
+        }
+
+        .partner-header {
+          padding: 20px;
+        }
+
+        .partner-header h2 {
+          font-size: 20px;
+        }
+
+        .partner-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 21px;
+        }
+      }

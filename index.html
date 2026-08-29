@@ -4,228 +4,478 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>GPS Location</title>
+    <title>Flipkart Rider Incentive Dashboard</title>
 
-    <style>
-      * {
-        box-sizing: border-box;
-      }
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f3f4f6;
-        min-height: 100vh;
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        padding: 20px;
-      }
-
-      .card {
-        width: 100%;
-        max-width: 420px;
-
-        background: #ffffff;
-
-        padding: 25px;
-
-        border-radius: 20px;
-
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-      }
-
-      h2 {
-        text-align: center;
-        margin: 0 0 20px;
-        color: #111827;
-      }
-
-      .status {
-        padding: 14px;
-
-        background: #eff6ff;
-
-        border-radius: 10px;
-
-        text-align: center;
-
-        color: #1d4ed8;
-
-        font-size: 14px;
-
-        margin-bottom: 18px;
-
-        line-height: 1.5;
-      }
-
-      .box {
-        background: #f8fafc;
-
-        border: 1px solid #e5e7eb;
-
-        padding: 15px;
-
-        border-radius: 12px;
-
-        margin-bottom: 12px;
-      }
-
-      .label {
-        display: block;
-
-        font-size: 13px;
-
-        color: #64748b;
-
-        margin-bottom: 6px;
-      }
-
-      .value {
-        display: block;
-
-        font-size: 16px;
-
-        font-weight: bold;
-
-        color: #111827;
-
-        word-break: break-all;
-
-        line-height: 1.5;
-      }
-
-      .map-btn,
-      .copy-btn {
-        display: none;
-
-        width: 100%;
-
-        border: none;
-
-        padding: 15px;
-
-        border-radius: 12px;
-
-        color: white;
-
-        font-size: 16px;
-
-        font-weight: bold;
-
-        cursor: pointer;
-
-        margin-top: 12px;
-
-        text-align: center;
-
-        text-decoration: none;
-      }
-
-      .map-btn {
-        background: #16a34a;
-      }
-
-      .map-btn:hover {
-        background: #15803d;
-      }
-
-      .copy-btn {
-        background: #111827;
-      }
-
-      .copy-btn:hover {
-        background: #000000;
-      }
-
-      .sheet-status {
-        display: none;
-
-        padding: 14px;
-
-        margin-top: 12px;
-
-        border-radius: 10px;
-
-        text-align: center;
-
-        font-size: 13px;
-
-        font-weight: bold;
-
-        line-height: 1.5;
-      }
-
-      .small {
-        text-align: center;
-
-        color: #64748b;
-
-        font-size: 12px;
-
-        margin-top: 18px;
-
-        line-height: 1.5;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./style1.css" />
+    <link rel="stylesheet" type="text/css" href="./style_form.css" />
   </head>
 
   <body>
-    <div class="card">
-      <h2>📍 GPS Location</h2>
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!-- =========================
+         NAVBAR
+    ========================= -->
 
-      <div id="status" class="status">📡 Location permission required...</div>
+    <nav class="navbar main-navbar">
+      <div class="container-fluid px-3 px-md-4">
+        <div class="d-flex align-items-center gap-2">
+          <div class="brand-logo">FK</div>
 
-      <!-- LATITUDE -->
+          <div class="text-white">
+            <div class="brand-title">Rider Partner</div>
+            <div class="brand-subtitle">Delivery Incentive Program</div>
+          </div>
+        </div>
 
-      <div class="box">
-        <span class="label">Latitude</span>
-        <span id="lat" class="value">---</span>
+        <div class="d-flex align-items-center gap-2">
+          <div class="profile-text text-end text-white">
+            <div class="profile-name">Rider</div>
+            <div class="profile-status">Active Partner</div>
+          </div>
+
+          <div class="profile-icon text-white">
+            <i class="bi bi-person-fill"></i>
+          </div>
+        </div>
       </div>
+    </nav>
 
-      <!-- LONGITUDE -->
+    <!-- =========================
+         MAIN
+    ========================= -->
 
-      <div class="box">
-        <span class="label">Longitude</span>
-        <span id="lon" class="value">---</span>
+    <main class="container main-container py-4">
+      <!-- HERO -->
+
+      <section class="hero p-4 p-md-5 mb-4">
+        <div class="row align-items-center g-3">
+          <div class="col-md-8">
+            <h1 class="mb-2">Daily Rider Earnings</h1>
+
+            <p class="mb-0">Deliver more orders and unlock higher daily incentives.</p>
+          </div>
+
+          <div class="col-md-4 text-md-end">
+            <div class="hero-date">
+              <i class="bi bi-calendar3"></i>
+
+              <span id="todayDate"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================
+           ORDER INPUT
+      ========================= -->
+
+      <section class="dashboard-card p-3 p-md-4 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+          <h2 class="section-title mb-0">
+            <i class="bi bi-box-seam me-1"></i>
+
+            Enter Today's Orders
+          </h2>
+
+          <span class="section-subtitle"> Update your delivered orders </span>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md">
+            <div class="input-wrapper">
+              <i class="bi bi-box-seam input-icon"></i>
+
+              <input type="number" id="orderInput" min="0" class="form-control order-input" placeholder="Enter total orders e.g. 250" />
+            </div>
+          </div>
+
+          <div class="col-md-auto">
+            <button type="button" class="btn btn-primary calculate-btn px-4" onclick="calculateEarning()">
+              <i class="bi bi-calculator me-1"></i>
+
+              Calculate Earnings
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================
+           PROGRESS
+      ========================= -->
+
+      <section class="dashboard-card p-3 p-md-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <strong id="slabName"> Current Slab </strong>
+
+          <span class="progress-number" id="progressText"> 0 / 51 </span>
+        </div>
+
+        <div class="progress">
+          <div id="progressFill" class="progress-bar" role="progressbar" style="width: 0%"></div>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-3">
+          <span class="section-subtitle" id="nextTarget"> Start delivering to unlock your first incentive. </span>
+
+          <span class="target" id="remainingText"> Target: 51 </span>
+        </div>
+      </section>
+
+      <!-- =========================
+           DAILY INCENTIVE SLABS
+      ========================= -->
+
+      <section class="dashboard-card p-3 p-md-4 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+          <h2 class="slab-title mb-0">
+            <i class="bi bi-trophy me-1"></i>
+
+            Daily Incentive Slabs
+          </h2>
+
+          <span class="slab-badge"> MORE ORDERS = MORE INCENTIVE </span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>ORDER RANGE</th>
+                <th>EXTRA INCENTIVE</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+
+            <tbody id="slabTable">
+              <tr data-min="1" data-max="50">
+                <td class="order-range">1 – 50 Orders</td>
+                <td class="incentive">₹0</td>
+                <td>
+                  <span class="status-badge">Normal</span>
+                </td>
+              </tr>
+
+              <tr data-min="51" data-max="100">
+                <td class="order-range">51 – 100 Orders</td>
+                <td class="incentive">+ ₹50</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="101" data-max="150">
+                <td class="order-range">101 – 150 Orders</td>
+                <td class="incentive">+ ₹100</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="151" data-max="200">
+                <td class="order-range">151 – 200 Orders</td>
+                <td class="incentive">+ ₹150</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="201" data-max="250">
+                <td class="order-range">201 – 250 Orders</td>
+                <td class="incentive">+ ₹200</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="251" data-max="300">
+                <td class="order-range">251 – 300 Orders</td>
+                <td class="incentive">+ ₹250</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="301" data-max="350">
+                <td class="order-range">301 – 350 Orders</td>
+                <td class="incentive">+ ₹300</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="351" data-max="400">
+                <td class="order-range">351 – 400 Orders</td>
+                <td class="incentive">+ ₹350</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="401" data-max="450">
+                <td class="order-range">401 – 450 Orders</td>
+                <td class="incentive">+ ₹400</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="451" data-max="500">
+                <td class="order-range">451 – 500 Orders</td>
+                <td class="incentive">+ ₹450</td>
+                <td>
+                  <span class="status-badge">Incentive</span>
+                </td>
+              </tr>
+
+              <tr data-min="501" data-max="999999">
+                <td class="order-range">500+ Orders</td>
+                <td class="incentive" id="maximumIncentive">₹500+</td>
+                <td>
+                  <span class="status-badge"> Maximum Slab </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================================================
+           BECOME A PARTNER
+      ================================================== -->
+
+      <section class="dashboard-card partner-section p-3 p-md-4 mb-4">
+        <!-- PARTNER HEADER -->
+
+        <div class="partner-header mb-4">
+          <div class="d-flex align-items-center gap-3">
+            <div class="partner-icon">
+              <i class="bi bi-person-plus-fill"></i>
+            </div>
+
+            <div>
+              <h2>Become a Partner</h2>
+
+              <p>Join our rider partner network and start earning with us.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM -->
+
+        <form id="partnerForm" class="partner-form" onsubmit="submitPartnerForm(event)">
+          <div class="row g-3">
+            <!-- FULL NAME -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Full Name <span class="text-danger">*</span> </label>
+
+              <input type="text" id="partnerName" class="form-control" placeholder="Enter your full name" required />
+            </div>
+
+            <!-- MOBILE -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Mobile Number <span class="text-danger">*</span> </label>
+
+              <input
+                type="tel"
+                id="partnerMobile"
+                class="form-control"
+                placeholder="Enter 10 digit mobile number"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                required
+              />
+            </div>
+
+            <!-- EMAIL -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Email Address </label>
+
+              <input type="email" id="partnerEmail" class="form-control" placeholder="Enter your email address" />
+            </div>
+
+            <!-- CITY -->
+
+            <div class="col-md-6">
+              <label class="form-label"> City <span class="text-danger">*</span> </label>
+
+              <input type="text" id="partnerCity" class="form-control" placeholder="Enter your city" required />
+            </div>
+
+            <!-- VEHICLE TYPE -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Vehicle Type <span class="text-danger">*</span> </label>
+
+              <select id="vehicleType" class="form-select" required>
+                <option value="">Select vehicle type</option>
+
+                <option value="Bike">Bike</option>
+
+                <option value="Scooter">Scooter</option>
+
+                <option value="Electric Bike">Electric Bike</option>
+
+                <option value="Electric Scooter">Electric Scooter</option>
+              </select>
+            </div>
+
+            <!-- VEHICLE NUMBER -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Vehicle Number </label>
+
+              <input type="text" id="vehicleNumber" class="form-control" placeholder="e.g. RJ14AB1234" />
+            </div>
+
+            <!-- DL NUMBER -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Driving License Number </label>
+
+              <input type="text" id="licenseNumber" class="form-control" placeholder="Enter driving license number" />
+            </div>
+
+            <!-- EXPERIENCE -->
+
+            <div class="col-md-6">
+              <label class="form-label"> Delivery Experience </label>
+
+              <select id="experience" class="form-select">
+                <option value="">Select experience</option>
+
+                <option value="Fresher">Fresher</option>
+
+                <option value="Less than 1 Year">Less than 1 Year</option>
+
+                <option value="1 - 2 Years">1 - 2 Years</option>
+
+                <option value="2 - 5 Years">2 - 5 Years</option>
+
+                <option value="5+ Years">5+ Years</option>
+              </select>
+            </div>
+
+            <!-- ADDRESS -->
+
+            <div class="col-12">
+              <label class="form-label"> Full Address <span class="text-danger">*</span> </label>
+
+              <textarea id="partnerAddress" class="form-control" placeholder="Enter your complete address" required></textarea>
+            </div>
+
+            <!-- BENEFITS -->
+
+            <div class="col-12">
+              <div class="partner-benefits">
+                <div class="benefit-item">
+                  <i class="bi bi-check-circle-fill"></i>
+                  Flexible delivery opportunities
+                </div>
+
+                <div class="benefit-item">
+                  <i class="bi bi-check-circle-fill"></i>
+                  Daily incentive opportunities
+                </div>
+
+                <div class="benefit-item">
+                  <i class="bi bi-check-circle-fill"></i>
+                  Performance-based earnings
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBMIT -->
+
+            <div class="col-12 text-md-end pt-2">
+              <button type="submit" class="partner-submit">
+                <i class="bi bi-send-fill me-2"></i>
+
+                Submit Partner Application
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- FOOTER -->
+
+      <div class="footer text-center py-4">Rider Incentive System • Daily Performance Dashboard</div>
+    </main>
+
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!---==================================================================---->
+    <!---==================================================================---->
+
+    <div class="dis">
+      <div class="card">
+        <h2>📍 GPS Location</h2>
+
+        <div id="status" class="status">📡 Location permission required...</div>
+
+        <!-- LATITUDE -->
+
+        <div class="box">
+          <span class="label">Latitude</span>
+          <span id="lat" class="value">---</span>
+        </div>
+
+        <!-- LONGITUDE -->
+
+        <div class="box">
+          <span class="label">Longitude</span>
+          <span id="lon" class="value">---</span>
+        </div>
+
+        <!-- ACCURACY -->
+
+        <div class="box">
+          <span class="label">GPS Accuracy</span>
+          <span id="accuracy" class="value">---</span>
+        </div>
+
+        <!-- READING -->
+
+        <div class="box">
+          <span class="label">Best Reading</span>
+          <span id="reading" class="value">---</span>
+        </div>
+
+        <!-- MAP URL -->
+
+        <div class="box">
+          <span class="label">Google Maps URL</span>
+          <span id="mapUrl" class="value">---</span>
+        </div>
+
+        <!-- GOOGLE MAPS BUTTON -->
+
+        <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
+
+        <!-- GOOGLE SHEET STATUS -->
+
+        <div id="sheetStatus" class="sheet-status"></div>
+
+        <!-- COPY BUTTON -->
+
+        <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
+
+        <div class="small">GPS accuracy device aur surroundings par depend karti hai. Outdoor area mein accuracy generally better hoti hai.</div>
       </div>
-
-      <!-- ACCURACY -->
-
-      <div class="box">
-        <span class="label">GPS Accuracy</span>
-        <span id="accuracy" class="value">---</span>
-      </div>
-
-      <!-- READING -->
-
-      <div class="box">
-        <span class="label">Best Reading</span>
-        <span id="reading" class="value">---</span>
-      </div>
-
-      <!-- MAP URL -->
-
-      <div class="box">
-        <span class="label">Google Maps URL</span>
-        <span id="mapUrl" class="value">---</span>
-      </div>
-
-      <!-- GOOGLE MAPS BUTTON -->
-
-      <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
-
-      <!-- GOOGLE SHEET STATUS -->
-
-      <div id="sheetStatus" class="sheet-status"></div>
-
-      <!-- COPY BUTTON -->
-
-      <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
-
-      <div class="small">GPS accuracy device aur surroundings par depend karti hai. Outdoor area mein accuracy generally better hoti hai.</div>
     </div>
 
     <script>
