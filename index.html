@@ -39,9 +39,7 @@
 
       h2 {
         text-align: center;
-
         margin: 0 0 20px;
-
         color: #111827;
       }
 
@@ -100,7 +98,6 @@
       }
 
       .map-btn,
-      .save-btn,
       .copy-btn {
         display: none;
 
@@ -133,20 +130,6 @@
 
       .map-btn:hover {
         background: #15803d;
-      }
-
-      .save-btn {
-        background: #2563eb;
-      }
-
-      .save-btn:hover {
-        background: #1d4ed8;
-      }
-
-      .save-btn:disabled {
-        background: #94a3b8;
-
-        cursor: not-allowed;
       }
 
       .copy-btn {
@@ -199,7 +182,6 @@
 
       <div class="box">
         <span class="label">Latitude</span>
-
         <span id="lat" class="value">---</span>
       </div>
 
@@ -207,7 +189,6 @@
 
       <div class="box">
         <span class="label">Longitude</span>
-
         <span id="lon" class="value">---</span>
       </div>
 
@@ -215,7 +196,6 @@
 
       <div class="box">
         <span class="label">GPS Accuracy</span>
-
         <span id="accuracy" class="value">---</span>
       </div>
 
@@ -223,7 +203,6 @@
 
       <div class="box">
         <span class="label">Best Reading</span>
-
         <span id="reading" class="value">---</span>
       </div>
 
@@ -231,23 +210,18 @@
 
       <div class="box">
         <span class="label">Google Maps URL</span>
-
         <span id="mapUrl" class="value">---</span>
       </div>
 
-      <!-- GOOGLE MAPS -->
+      <!-- GOOGLE MAPS BUTTON -->
 
       <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
-      <!-- SAVE -->
-
-      <button id="saveBtn" class="save-btn" type="button" onclick="saveToGoogleSheet()">💾 Save Location</button>
-
-      <!-- SHEET STATUS -->
+      <!-- GOOGLE SHEET STATUS -->
 
       <div id="sheetStatus" class="sheet-status"></div>
 
-      <!-- COPY -->
+      <!-- COPY BUTTON -->
 
       <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
 
@@ -256,13 +230,13 @@
 
     <script>
       /* =========================================================
-   GOOGLE APPS SCRIPT WEB APP
+   GOOGLE APPS SCRIPT WEB APP URL
 ========================================================= */
 
       const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
 
       /* =========================================================
-   GPS SETTINGS
+   GPS VARIABLES
 ========================================================= */
 
       let bestPosition = null;
@@ -273,6 +247,12 @@
 
       let sheetAlreadySaved = false;
 
+      let autoSaveStarted = false;
+
+      /* =========================================================
+   GPS SETTINGS
+========================================================= */
+
       const MAX_READINGS = 10;
 
       /* =========================================================
@@ -280,7 +260,7 @@
 ========================================================= */
 
       window.addEventListener("load", function () {
-        console.log("Page loaded");
+        console.log("🚀 Page loaded");
 
         startGPS();
       });
@@ -292,11 +272,15 @@
       function startGPS() {
         const status = document.getElementById("status");
 
+        /* GPS SUPPORT CHECK */
+
         if (!navigator.geolocation) {
           status.innerHTML = "❌ Browser GPS support nahi karta.";
 
           return;
         }
+
+        /* HTTPS CHECK */
 
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
           status.innerHTML = "⚠️ GPS ke liye HTTPS ya localhost required hai.";
@@ -306,18 +290,21 @@
 
         status.innerHTML = "📍 Location permission Allow karein...";
 
+        /* =====================================================
+     WATCH GPS
+  ===================================================== */
+
         watchId = navigator.geolocation.watchPosition(
           function (position) {
             readings++;
 
             const accuracy = position.coords.accuracy;
 
-            console.log("GPS Reading:", readings, "Accuracy:", accuracy);
+            console.log("📡 GPS Reading:", readings, "Accuracy:", accuracy);
 
-            /*
-          Sirf better accuracy wali
-          location ko save/display karenge.
-        */
+            /* =================================================
+         BEST ACCURACY LOCATION
+      ================================================= */
 
             if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
               bestPosition = position;
@@ -327,19 +314,45 @@
               createMapURL(position);
 
               showButtons();
+
+              /* =============================================
+           1 SECOND TIMER
+           
+           LOCATION MILNE KE BAAD
+           1 SECOND WAIT
+           PHIR SAVE
+        ============================================= */
+
+              if (!autoSaveStarted) {
+                autoSaveStarted = true;
+
+                console.log("⏳ 1 second timer started...");
+
+                status.innerHTML = "📍 Location found. Saving in 1 second...";
+
+                setTimeout(function () {
+                  console.log("⏰ Timer complete.");
+
+                  saveToGoogleSheet();
+                }, 1000);
+              }
             }
 
-            /*
-          10 readings ke baad GPS stop
-        */
+            /* =================================================
+         MAX READINGS
+      ================================================= */
 
             if (readings >= MAX_READINGS) {
               finishGPS();
             }
           },
 
+          /* =====================================================
+       GPS ERROR
+    ===================================================== */
+
           function (error) {
-            console.error("GPS ERROR:", error);
+            console.error("❌ GPS ERROR:", error);
 
             if (error.code === 1) {
               status.innerHTML = "❌ Location permission denied.<br><br>" + "Browser settings mein Location Allow karein.";
@@ -351,6 +364,10 @@
               status.innerHTML = "❌ GPS location nahi mil saki.";
             }
           },
+
+          /* =====================================================
+       GPS OPTIONS
+    ===================================================== */
 
           {
             enableHighAccuracy: true,
@@ -408,6 +425,8 @@
         const mapBtn = document.getElementById("mapBtn");
 
         mapBtn.href = url;
+
+        mapBtn.style.display = "block";
       }
 
       /* =========================================================
@@ -416,8 +435,6 @@
 
       function showButtons() {
         document.getElementById("mapBtn").style.display = "block";
-
-        document.getElementById("saveBtn").style.display = "block";
 
         document.getElementById("copyBtn").style.display = "block";
       }
@@ -444,17 +461,22 @@
 
       /* =========================================================
    SAVE TO GOOGLE SHEET
+   AUTOMATIC FUNCTION
 ========================================================= */
 
       function saveToGoogleSheet() {
+        /* LOCATION CHECK */
+
         if (!bestPosition) {
-          alert("❌ Pehle GPS location allow karein.");
+          console.log("❌ Location available nahi hai.");
 
           return;
         }
 
+        /* DUPLICATE CHECK */
+
         if (sheetAlreadySaved) {
-          alert("✅ Location already save ho chuki hai.");
+          console.log("⚠️ Data already saved.");
 
           return;
         }
@@ -469,21 +491,9 @@
 
         const dateTime = new Date().toLocaleString("en-IN");
 
-        const saveBtn = document.getElementById("saveBtn");
-
-        const sheetStatus = document.getElementById("sheetStatus");
-
-        saveBtn.disabled = true;
-
-        saveBtn.innerHTML = "⏳ Saving...";
-
-        sheetStatus.style.display = "block";
-
-        sheetStatus.style.background = "#eff6ff";
-
-        sheetStatus.style.color = "#1d4ed8";
-
-        sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
+        /* =====================================================
+     DATA
+  ===================================================== */
 
         const data = {
           dateTime: dateTime,
@@ -494,56 +504,69 @@
 
           accuracy: accuracy.toFixed(2),
 
-          mapsURL: mapsURL,
+          mapsUrl: mapsURL,
         };
 
-        console.log("Sending data:", data);
+        console.log("📤 Sending Google Sheet Data:", data);
 
-        fetch(GOOGLE_SHEET_API, {
-          method: "POST",
+        const sheetStatus = document.getElementById("sheetStatus");
 
-          mode: "no-cors",
+        sheetStatus.style.display = "block";
 
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
+        sheetStatus.style.background = "#eff6ff";
+
+        sheetStatus.style.color = "#1d4ed8";
+
+        sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
+
+        /* =====================================================
+     API REQUEST
+  ===================================================== */
+
+        fetch(
+          GOOGLE_SHEET_API,
+
+          {
+            method: "POST",
+
+            mode: "no-cors",
+
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+
+            body: JSON.stringify(data),
           },
-
-          body: JSON.stringify(data),
-        })
+        )
           .then(function () {
             sheetAlreadySaved = true;
-
-            saveBtn.disabled = true;
-
-            saveBtn.innerHTML = "✅ Saved to Google Sheet";
 
             sheetStatus.style.background = "#f0fdf4";
 
             sheetStatus.style.color = "#15803d";
 
             sheetStatus.innerHTML =
-              "✅ <b>Location saved!</b><br>" + "<small>" + "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." + "</small>";
+              "✅ <b>Location saved to Google Sheet!</b><br>" +
+              "<small>" +
+              "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." +
+              "</small>";
 
-            console.log("Google Sheet request completed.");
+            console.log("✅ Google Sheet request sent successfully.");
           })
 
           .catch(function (error) {
-            console.error("Google Sheet Error:", error);
-
-            saveBtn.disabled = false;
-
-            saveBtn.innerHTML = "💾 Save Location";
+            console.error("❌ Google Sheet Error:", error);
 
             sheetStatus.style.background = "#fef2f2";
 
             sheetStatus.style.color = "#dc2626";
 
-            sheetStatus.innerHTML = "❌ Data save nahi hua.<br>" + "<small>" + String(error) + "</small>";
+            sheetStatus.innerHTML = "❌ Google Sheet request failed.";
           });
       }
 
       /* =========================================================
-   COPY LOCATION
+   COPY GOOGLE MAPS URL
 ========================================================= */
 
       function copyLocation() {
