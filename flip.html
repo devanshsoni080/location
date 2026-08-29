@@ -2,123 +2,113 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Flipkart Rider Incentive Dashboard</title>
+    <title>Rider Incentive Dashboard</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, Helvetica, sans-serif;
-      }
-
       :root {
         --blue: #2874f0;
         --dark-blue: #0f4bbd;
         --yellow: #ffe500;
-        --light-blue: #f1f6ff;
-        --green: #16a34a;
-        --orange: #f59e0b;
+
+        --bg: #f5f7fb;
         --text: #172033;
         --muted: #697386;
         --border: #e5e9f0;
-        --white: #ffffff;
-        --bg: #f5f7fb;
+
+        --green: #16a34a;
       }
 
       body {
         background: var(--bg);
+
         color: var(--text);
+
+        font-family: Arial, Helvetica, sans-serif;
       }
 
       /* =========================
-       TOP NAVBAR
+       NAVBAR
     ========================== */
 
-      .navbar {
-        height: 70px;
+      .main-navbar {
         background: var(--blue);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 35px;
-        color: white;
+
+        min-height: 70px;
+
         box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
       }
 
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .logo {
+      .brand-logo {
         width: 45px;
+
         height: 45px;
+
         background: var(--yellow);
+
         color: var(--blue);
+
         border-radius: 8px;
+
         display: flex;
+
         align-items: center;
+
         justify-content: center;
+
         font-size: 22px;
+
         font-weight: 900;
+
         font-style: italic;
       }
 
-      .brand-text strong {
-        display: block;
+      .brand-title {
         font-size: 20px;
+
+        font-weight: 700;
+
         line-height: 22px;
       }
 
-      .brand-text span {
+      .brand-subtitle {
         font-size: 11px;
-        opacity: 0.85;
-      }
 
-      .profile {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        opacity: 0.85;
       }
 
       .profile-icon {
         width: 40px;
+
         height: 40px;
-        background: rgba(255, 255, 255, 0.18);
+
         border-radius: 50%;
+
+        background: rgba(255, 255, 255, 0.18);
+
         display: flex;
+
         align-items: center;
+
         justify-content: center;
-        font-size: 19px;
-      }
 
-      .profile-text {
-        text-align: right;
-      }
-
-      .profile-text strong {
-        display: block;
-        font-size: 14px;
-      }
-
-      .profile-text span {
-        font-size: 11px;
-        opacity: 0.8;
+        font-size: 18px;
       }
 
       /* =========================
-       MAIN
+       MAIN CONTAINER
     ========================== */
 
-      .container {
-        width: 100%;
+      .main-container {
         max-width: 1180px;
-        margin: auto;
-        padding: 25px 20px 40px;
       }
 
       /* =========================
@@ -128,265 +118,146 @@
       .hero {
         background: linear-gradient(135deg, var(--blue), var(--dark-blue));
 
-        color: white;
         border-radius: 18px;
-        padding: 28px;
-        margin-bottom: 22px;
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        color: white;
 
         box-shadow: 0 10px 30px rgba(40, 116, 240, 0.22);
       }
 
-      .hero-left h1 {
+      .hero h1 {
         font-size: 28px;
-        margin-bottom: 8px;
+
+        font-weight: 700;
       }
 
-      .hero-left p {
+      .hero p {
         font-size: 14px;
+
         opacity: 0.9;
       }
 
       .hero-date {
         background: rgba(255, 255, 255, 0.14);
+
         border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 12px 16px;
+
         border-radius: 12px;
+
+        padding: 11px 15px;
+
         font-size: 13px;
       }
 
       /* =========================
-       SUMMARY CARDS
+       COMMON CARD
     ========================== */
 
-      .summary {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-bottom: 22px;
-      }
+      .dashboard-card {
+        background: white;
 
-      .card {
-        background: var(--white);
         border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 21px;
+
+        border-radius: 18px;
 
         box-shadow: 0 5px 18px rgba(0, 0, 0, 0.045);
-
-        position: relative;
-        overflow: hidden;
-      }
-
-      .card::after {
-        content: "";
-        position: absolute;
-        right: -30px;
-        top: -30px;
-
-        width: 90px;
-        height: 90px;
-
-        background: var(--light-blue);
-        border-radius: 50%;
-      }
-
-      .card-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 11px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 19px;
-        margin-bottom: 14px;
-      }
-
-      .icon-blue {
-        background: #eaf2ff;
-        color: var(--blue);
-      }
-
-      .icon-green {
-        background: #eaf8ef;
-        color: var(--green);
-      }
-
-      .icon-yellow {
-        background: #fff8d7;
-        color: #d69e00;
-      }
-
-      .card-title {
-        color: var(--muted);
-        font-size: 12px;
-        margin-bottom: 7px;
-      }
-
-      .card-value {
-        font-size: 28px;
-        font-weight: 800;
       }
 
       /* =========================
-       ORDER INPUT
+       ORDER BOX
     ========================== */
 
-      .order-box {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 23px;
-        margin-bottom: 22px;
-
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.045);
-      }
-
       .section-title {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 18px;
-      }
-
-      .section-title h2 {
         font-size: 19px;
+
+        font-weight: 700;
       }
 
-      .section-title span {
+      .section-subtitle {
         font-size: 12px;
+
         color: var(--muted);
       }
 
-      .input-row {
-        display: flex;
-        gap: 12px;
-      }
-
-      .input-wrapper {
-        position: relative;
-        flex: 1;
-      }
-
-      .input-wrapper span {
-        position: absolute;
-        left: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--muted);
-        font-size: 17px;
-      }
-
-      .input-row input {
-        width: 100%;
+      .order-input {
         height: 54px;
 
-        border: 1px solid #d9dee8;
         border-radius: 12px;
 
-        padding: 0 16px 0 45px;
+        border-color: #d9dee8;
 
-        font-size: 16px;
-        outline: none;
-        transition: 0.2s;
+        padding-left: 42px;
       }
 
-      .input-row input:focus {
+      .order-input:focus {
         border-color: var(--blue);
+
         box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
       }
 
-      .btn {
-        height: 54px;
-        padding: 0 28px;
+      .input-icon {
+        position: absolute;
 
-        border: none;
-        border-radius: 12px;
+        left: 15px;
 
-        background: var(--blue);
-        color: white;
+        top: 50%;
 
-        font-size: 15px;
-        font-weight: 700;
+        transform: translateY(-50%);
 
-        cursor: pointer;
-        transition: 0.2s;
+        color: var(--muted);
+
+        z-index: 5;
       }
 
-      .btn:hover {
+      .calculate-btn {
+        height: 54px;
+
+        background: var(--blue);
+
+        border: none;
+
+        border-radius: 12px;
+
+        font-size: 15px;
+
+        font-weight: 700;
+      }
+
+      .calculate-btn:hover {
         background: var(--dark-blue);
-        transform: translateY(-1px);
       }
 
       /* =========================
        PROGRESS
     ========================== */
 
-      .progress-card {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 18px;
+      .progress {
+        height: 14px;
 
-        padding: 24px;
-        margin-bottom: 22px;
+        background: #edf1f7;
 
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.045);
+        border-radius: 30px;
       }
 
-      .progress-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      .progress-bar {
+        background: linear-gradient(90deg, var(--blue), #43a5ff);
 
-        margin-bottom: 14px;
-      }
+        border-radius: 30px;
 
-      .progress-heading strong {
-        font-size: 16px;
+        transition: width 0.5s ease;
       }
 
       .progress-number {
         color: var(--blue);
+
         font-size: 14px;
-      }
 
-      .progress-bar {
-        height: 14px;
-        width: 100%;
-
-        background: #edf1f7;
-        border-radius: 20px;
-
-        overflow: hidden;
-      }
-
-      .progress-fill {
-        height: 100%;
-        width: 0%;
-
-        background: linear-gradient(90deg, var(--blue), #43a5ff);
-
-        border-radius: 20px;
-        transition: width 0.5s ease;
-      }
-
-      .progress-bottom {
-        display: flex;
-        justify-content: space-between;
-
-        margin-top: 13px;
-
-        font-size: 13px;
-        color: var(--muted);
+        font-weight: 700;
       }
 
       .target {
         color: var(--green);
+
         font-weight: 700;
       }
 
@@ -394,79 +265,32 @@
        SLAB TABLE
     ========================== */
 
-      .slab-section {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 18px;
-
-        padding: 23px;
-
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.045);
-      }
-
-      .slab-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        margin-bottom: 18px;
-      }
-
-      .slab-title h2 {
-        font-size: 19px;
-      }
-
-      .slab-title span {
+      .slab-badge {
         background: #fff8d7;
+
         color: #a97900;
 
-        padding: 7px 11px;
-        border-radius: 20px;
-
         font-size: 11px;
+
         font-weight: 700;
+
+        padding: 7px 11px;
+
+        border-radius: 20px;
       }
 
-      .table-wrapper {
-        overflow-x: auto;
+      .table > :not(caption) > * > * {
+        padding: 15px 14px;
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 600px;
-      }
-
-      th {
+      .table thead th {
         background: #f7f9fc;
-        padding: 14px;
-
-        text-align: left;
 
         color: #667085;
+
         font-size: 12px;
 
         border-bottom: 1px solid var(--border);
-      }
-
-      td {
-        padding: 15px 14px;
-
-        border-bottom: 1px solid #edf0f4;
-
-        font-size: 14px;
-      }
-
-      tr:last-child td {
-        border-bottom: none;
-      }
-
-      tr.active {
-        background: #edf5ff;
-      }
-
-      tr.active td:first-child {
-        border-left: 4px solid var(--blue);
       }
 
       .order-range {
@@ -475,11 +299,13 @@
 
       .incentive {
         color: var(--green);
+
         font-weight: 800;
       }
 
-      .badge {
+      .status-badge {
         display: inline-flex;
+
         align-items: center;
 
         padding: 6px 10px;
@@ -487,14 +313,25 @@
         border-radius: 20px;
 
         background: #eaf8ef;
+
         color: #15803d;
 
         font-size: 11px;
+
         font-weight: 700;
       }
 
-      .active-badge {
+      .active-row {
+        background: #edf5ff !important;
+      }
+
+      .active-row td:first-child {
+        border-left: 4px solid var(--blue);
+      }
+
+      .active-status {
         background: var(--blue);
+
         color: white;
       }
 
@@ -503,10 +340,7 @@
     ========================== */
 
       .footer {
-        text-align: center;
         color: #8b95a7;
-
-        padding: 25px 0 5px;
 
         font-size: 12px;
       }
@@ -515,18 +349,18 @@
        MOBILE
     ========================== */
 
-      @media (max-width: 700px) {
-        .navbar {
-          height: 64px;
-          padding: 0 15px;
+      @media (max-width: 767px) {
+        .main-navbar {
+          min-height: 64px;
         }
 
-        .logo {
+        .brand-logo {
           width: 40px;
+
           height: 40px;
         }
 
-        .brand-text strong {
+        .brand-title {
           font-size: 16px;
         }
 
@@ -534,171 +368,164 @@
           display: none;
         }
 
-        .container {
-          padding: 14px 12px 30px;
-        }
-
-        .hero {
-          padding: 20px;
-          display: block;
-        }
-
-        .hero-left h1 {
+        .hero h1 {
           font-size: 23px;
         }
 
         .hero-date {
           display: inline-block;
+
           margin-top: 15px;
         }
 
-        .summary {
-          grid-template-columns: 1fr;
-          gap: 12px;
+        .dashboard-card {
+          border-radius: 15px;
         }
 
-        .card {
-          padding: 17px;
-        }
-
-        .card-value {
-          font-size: 25px;
-        }
-
-        .order-box,
-        .progress-card,
-        .slab-section {
-          padding: 17px;
-        }
-
-        .input-row {
-          flex-direction: column;
-        }
-
-        .btn {
-          width: 100%;
-        }
-
-        .section-title {
-          align-items: flex-start;
-          gap: 8px;
-          flex-direction: column;
-        }
-
-        .slab-title {
-          align-items: flex-start;
-          gap: 10px;
-          flex-direction: column;
+        .table {
+          min-width: 600px;
         }
       }
     </style>
   </head>
 
   <body>
-    <!-- =========================
-       NAVBAR
-  ========================== -->
+    <!-- =====================================
+     NAVBAR
+===================================== -->
 
-    <nav class="navbar">
-      <div class="brand">
-        <div class="logo">FK</div>
+    <nav class="navbar main-navbar">
+      <div class="container-fluid px-3 px-md-4">
+        <div class="d-flex align-items-center gap-2">
+          <div class="brand-logo">FK</div>
 
-        <div class="brand-text">
-          <strong>Rider Partner</strong>
-          <span>Delivery Incentive Program</span>
-        </div>
-      </div>
+          <div class="text-white">
+            <div class="brand-title">Rider Partner</div>
 
-      <div class="profile">
-        <div class="profile-text">
-          <strong>Rider</strong>
-          <span>Active Partner</span>
+            <div class="brand-subtitle">Delivery Incentive Program</div>
+          </div>
         </div>
 
-        <div class="profile-icon">🚴</div>
+        <div class="d-flex align-items-center gap-2">
+          <div class="profile-text text-end text-white">
+            <strong class="d-block"> Rider </strong>
+
+            <small class="opacity-75"> Active Partner </small>
+          </div>
+
+          <div class="profile-icon text-white">
+            <i class="bi bi-person-fill"></i>
+          </div>
+        </div>
       </div>
     </nav>
 
-    <main class="container">
-      <!-- =========================
-         HERO
-    ========================== -->
+    <!-- =====================================
+     MAIN
+===================================== -->
 
-      <section class="hero">
-        <div class="hero-left">
-          <h1>Daily Rider Earnings</h1>
+    <main class="container main-container py-4">
+      <!-- =================================
+       HERO
+  ================================== -->
 
-          <p>Deliver more orders and unlock higher daily incentives.</p>
-        </div>
+      <section class="hero p-4 p-md-5 mb-4">
+        <div class="row align-items-center g-3">
+          <div class="col-md-8">
+            <h1 class="mb-2">Daily Rider Earnings</h1>
 
-        <div class="hero-date">📅 <span id="todayDate"></span></div>
-      </section>
-
-      <!-- =========================
-         SUMMARY
-    ========================== -->
-
-      <!-- =========================
-         ORDER INPUT
-    ========================== -->
-
-      <section class="order-box">
-        <div class="section-title">
-          <h2>📦 Enter Today's Orders</h2>
-
-          <span> Update your delivered orders </span>
-        </div>
-
-        <div class="input-row">
-          <div class="input-wrapper">
-            <span>📦</span>
-
-            <input type="number" id="orderInput" min="0" placeholder="Enter total orders e.g. 250" />
+            <p class="mb-0">Deliver more orders and unlock higher daily incentives.</p>
           </div>
 
-          <button class="btn" onclick="calculateEarning()">Calculate Earnings</button>
+          <div class="col-md-4 text-md-end">
+            <div class="hero-date">
+              <i class="bi bi-calendar3 me-1"></i>
+
+              <span id="todayDate"></span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- =========================
-         PROGRESS
-    ========================== -->
+      <!-- =================================
+       ORDER INPUT
+  ================================== -->
 
-      <section class="progress-card">
-        <div class="progress-heading">
+      <section class="dashboard-card p-3 p-md-4 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+          <h2 class="section-title mb-0">
+            <i class="bi bi-box-seam me-1"></i>
+
+            Enter Today's Orders
+          </h2>
+
+          <span class="section-subtitle"> Update your delivered orders </span>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md">
+            <div class="position-relative">
+              <i class="bi bi-box-seam input-icon"></i>
+
+              <input type="number" id="orderInput" min="0" class="form-control order-input" placeholder="Enter total orders e.g. 250" />
+            </div>
+          </div>
+
+          <div class="col-md-auto">
+            <button class="btn btn-primary calculate-btn px-4 w-100" onclick="calculateEarning()">
+              <i class="bi bi-calculator me-1"></i>
+
+              Calculate Earnings
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================
+       PROGRESS
+  ================================== -->
+
+      <section class="dashboard-card p-3 p-md-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
           <strong id="slabName"> Current Slab </strong>
 
           <span class="progress-number" id="progressText"> 0 / 51 </span>
         </div>
 
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
+        <div class="progress">
+          <div id="progressFill" class="progress-bar" role="progressbar" style="width: 0%"></div>
         </div>
 
-        <div class="progress-bottom">
-          <span id="nextTarget"> Start delivering to unlock your first incentive. </span>
+        <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-3">
+          <span class="section-subtitle" id="nextTarget"> Start delivering to unlock your first incentive. </span>
 
           <span class="target" id="remainingText"> Target: 51 </span>
         </div>
       </section>
 
-      <!-- =========================
-         SLABS
-    ========================== -->
+      <!-- =================================
+       SLAB TABLE
+  ================================== -->
 
-      <section class="slab-section">
-        <div class="slab-title">
-          <h2>🏆 Daily Incentive Slabs</h2>
+      <section class="dashboard-card p-3 p-md-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+          <h2 class="section-title mb-0">
+            <i class="bi bi-trophy me-1"></i>
 
-          <span> MORE ORDERS = MORE INCENTIVE </span>
+            Daily Incentive Slabs
+          </h2>
+
+          <span class="slab-badge"> MORE ORDERS = MORE INCENTIVE </span>
         </div>
 
-        <div class="table-wrapper">
-          <table>
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
             <thead>
               <tr>
                 <th>ORDER RANGE</th>
+
                 <th>EXTRA INCENTIVE</th>
+
                 <th>STATUS</th>
               </tr>
             </thead>
@@ -710,7 +537,7 @@
                 <td class="incentive">₹0</td>
 
                 <td>
-                  <span class="badge"> Normal </span>
+                  <span class="status-badge"> Normal </span>
                 </td>
               </tr>
 
@@ -720,7 +547,7 @@
                 <td class="incentive">+ ₹50</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -730,7 +557,7 @@
                 <td class="incentive">+ ₹100</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -740,7 +567,7 @@
                 <td class="incentive">+ ₹150</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -750,7 +577,7 @@
                 <td class="incentive">+ ₹200</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -760,7 +587,7 @@
                 <td class="incentive">+ ₹250</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -770,7 +597,7 @@
                 <td class="incentive">+ ₹300</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -780,7 +607,7 @@
                 <td class="incentive">+ ₹350</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -790,7 +617,7 @@
                 <td class="incentive">+ ₹400</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -800,7 +627,7 @@
                 <td class="incentive">+ ₹450</td>
 
                 <td>
-                  <span class="badge"> Incentive </span>
+                  <span class="status-badge"> Incentive </span>
                 </td>
               </tr>
 
@@ -810,7 +637,7 @@
                 <td class="incentive">₹500+</td>
 
                 <td>
-                  <span class="badge"> Maximum Slab </span>
+                  <span class="status-badge"> Maximum Slab </span>
                 </td>
               </tr>
             </tbody>
@@ -818,13 +645,19 @@
         </div>
       </section>
 
-      <div class="footer">Rider Incentive System • Daily Performance Dashboard</div>
+      <!-- FOOTER -->
+
+      <div class="footer text-center py-4">Rider Incentive System • Daily Performance Dashboard</div>
     </main>
+
+    <!-- =====================================
+     JAVASCRIPT
+===================================== -->
 
     <script>
       /* =========================
-       DATE
-    ========================== */
+   DATE
+========================= */
 
       const date = new Date();
 
@@ -835,17 +668,21 @@
       });
 
       /* =========================
-       CALCULATE
-    ========================== */
+   CALCULATE EARNING
+========================= */
 
       function calculateEarning() {
         let orders = parseInt(document.getElementById("orderInput").value) || 0;
 
         let incentive = 0;
+
         let nextTarget = 51;
+
         let slabName = "1 – 50 Orders";
 
-        /* SLABS */
+        /* =========================
+     SLABS
+  ========================== */
 
         if (orders >= 501) {
           incentive = 500 + Math.floor((orders - 500) / 50) * 50;
@@ -855,65 +692,69 @@
           slabName = "500+ Orders";
         } else if (orders >= 451) {
           incentive = 450;
+
           nextTarget = 501;
+
           slabName = "451 – 500 Orders";
         } else if (orders >= 401) {
           incentive = 400;
+
           nextTarget = 451;
+
           slabName = "401 – 450 Orders";
         } else if (orders >= 351) {
           incentive = 350;
+
           nextTarget = 401;
+
           slabName = "351 – 400 Orders";
         } else if (orders >= 301) {
           incentive = 300;
+
           nextTarget = 351;
+
           slabName = "301 – 350 Orders";
         } else if (orders >= 251) {
           incentive = 250;
+
           nextTarget = 301;
+
           slabName = "251 – 300 Orders";
         } else if (orders >= 201) {
           incentive = 200;
+
           nextTarget = 251;
+
           slabName = "201 – 250 Orders";
         } else if (orders >= 151) {
           incentive = 150;
+
           nextTarget = 201;
+
           slabName = "151 – 200 Orders";
         } else if (orders >= 101) {
           incentive = 100;
+
           nextTarget = 151;
+
           slabName = "101 – 150 Orders";
         } else if (orders >= 51) {
           incentive = 50;
+
           nextTarget = 101;
+
           slabName = "51 – 100 Orders";
         } else {
           incentive = 0;
+
           nextTarget = 51;
+
           slabName = "1 – 50 Orders";
         }
 
         /* =========================
-         EARNINGS
-      ========================== */
-
-        const baseRate = 20;
-
-        const baseEarning = orders * baseRate;
-
-        const total = baseEarning + incentive;
-
-        document.getElementById("ordersDisplay").innerText = orders;
-
-        document.getElementById("incentiveDisplay").innerText = "₹" + incentive;
-
-        document.getElementById("totalDisplay").innerText = "₹" + total;
-
-        /* =========================
-         PROGRESS
-      ========================== */
+     UPDATE PROGRESS
+  ========================== */
 
         let previousTarget = nextTarget - 50;
 
@@ -931,6 +772,10 @@
           progress = 100;
         }
 
+        if (progress < 0) {
+          progress = 0;
+        }
+
         document.getElementById("progressFill").style.width = progress + "%";
 
         document.getElementById("slabName").innerText = slabName;
@@ -940,8 +785,8 @@
         document.getElementById("remainingText").innerText = "Target: " + nextTarget;
 
         /* =========================
-         NEXT TARGET MESSAGE
-      ========================== */
+     NEXT TARGET MESSAGE
+  ========================== */
 
         if (orders >= 500) {
           document.getElementById("nextTarget").innerText = "🔥 Excellent performance! Keep delivering.";
@@ -954,35 +799,43 @@
         }
 
         /* =========================
-         ACTIVE ROW
-      ========================== */
+     ACTIVE SLAB
+  ========================== */
 
         const rows = document.querySelectorAll("#slabTable tr");
 
-        rows.forEach((row) => {
-          row.classList.remove("active");
+        rows.forEach(function (row) {
+          row.classList.remove("active-row");
+
+          const badge = row.querySelector(".status-badge");
+
+          badge.classList.remove("active-status");
 
           const min = parseInt(row.dataset.min);
 
           const max = parseInt(row.dataset.max);
 
-          const badge = row.querySelector(".badge");
-
-          badge.classList.remove("active-badge");
-
-          badge.innerText = min === 1 ? "Normal" : "Incentive";
-
           if (orders >= min && orders <= max) {
-            row.classList.add("active");
+            row.classList.add("active-row");
 
-            badge.classList.add("active-badge");
+            badge.classList.add("active-status");
 
             badge.innerText = "✓ Current Slab";
+          } else {
+            if (min === 1) {
+              badge.innerText = "Normal";
+            } else if (min === 501) {
+              badge.innerText = "Maximum Slab";
+            } else {
+              badge.innerText = "Incentive";
+            }
           }
         });
       }
 
-      /* ENTER KEY */
+      /* =========================
+   ENTER KEY
+========================= */
 
       document.getElementById("orderInput").addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
@@ -990,5 +843,9 @@
         }
       });
     </script>
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
