@@ -173,7 +173,61 @@
   </head>
 
   <body>
-    <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
+    <div class="card">
+      <h2>📍 GPS Location</h2>
+
+      <div id="status" class="status">📡 Location permission required...</div>
+
+      <!-- LATITUDE -->
+
+      <div class="box">
+        <span class="label">Latitude</span>
+        <span id="lat" class="value">---</span>
+      </div>
+
+      <!-- LONGITUDE -->
+
+      <div class="box">
+        <span class="label">Longitude</span>
+        <span id="lon" class="value">---</span>
+      </div>
+
+      <!-- ACCURACY -->
+
+      <div class="box">
+        <span class="label">GPS Accuracy</span>
+        <span id="accuracy" class="value">---</span>
+      </div>
+
+      <!-- READING -->
+
+      <div class="box">
+        <span class="label">Best Reading</span>
+        <span id="reading" class="value">---</span>
+      </div>
+
+      <!-- MAP URL -->
+
+      <div class="box">
+        <span class="label">Google Maps URL</span>
+        <span id="mapUrl" class="value">---</span>
+      </div>
+
+      <!-- GOOGLE MAPS BUTTON -->
+
+      <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
+
+      <!-- GOOGLE SHEET STATUS -->
+
+      <div id="sheetStatus" class="sheet-status"></div>
+
+      <!-- COPY BUTTON -->
+
+      <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
+
+      <div class="small">GPS accuracy device aur surroundings par depend karti hai. Outdoor area mein accuracy generally better hoti hai.</div>
+    </div>
+
     <script>
       /* =========================================================
    GOOGLE APPS SCRIPT WEB APP URL
