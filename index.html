@@ -1,17 +1,10 @@
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <title>Flipkart Rider Incentive Dashboard</title>
-
-        <!-- Bootstrap 5 -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-        <!-- Bootstrap Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-
+    <title>GPS Location</title>
 
     <style>
       * {
@@ -176,1290 +169,153 @@
 
         line-height: 1.5;
       }
-      .dis {
-        display: none;
-      }
     </style>
   </head>
 
   <body>
+    <div class="card">
+      <h2>📍 GPS Location</h2>
 
-        <style>
-          :root {
-            --blue: #2874f0;
-            --dark-blue: #0f4bbd;
-            --yellow: #ffe500;
-            --light-blue: #eaf3ff;
-            --green: #16a34a;
-            --text: #172033;
-            --muted: #697386;
-            --border: #e5e9f0;
-            --bg: #f5f7fb;
-          }
+      <div id="status" class="status">📡 Location permission required...</div>
 
-          * {
-            box-sizing: border-box;
-          }
+      <!-- LATITUDE -->
 
-          body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--text);
-            font-family: Arial, Helvetica, sans-serif;
-          }
+      <div class="box">
+        <span class="label">Latitude</span>
+        <span id="lat" class="value">---</span>
+      </div>
 
-          /* =========================
-         NAVBAR
-      ========================= */
+      <!-- LONGITUDE -->
 
-          .main-navbar {
-            background: var(--blue);
-            min-height: 70px;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.14);
-          }
+      <div class="box">
+        <span class="label">Longitude</span>
+        <span id="lon" class="value">---</span>
+      </div>
 
-          .brand-logo {
-            width: 46px;
-            height: 46px;
-            background: var(--yellow);
-            color: var(--blue);
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 900;
-            font-style: italic;
-          }
+      <!-- ACCURACY -->
 
-          .brand-title {
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 22px;
-          }
+      <div class="box">
+        <span class="label">GPS Accuracy</span>
+        <span id="accuracy" class="value">---</span>
+      </div>
 
-          .brand-subtitle {
-            font-size: 11px;
-            opacity: 0.85;
-          }
+      <!-- READING -->
 
-          .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-          }
+      <div class="box">
+        <span class="label">Best Reading</span>
+        <span id="reading" class="value">---</span>
+      </div>
 
-          .profile-name {
-            font-size: 14px;
-            font-weight: 700;
-          }
+      <!-- MAP URL -->
 
-          .profile-status {
-            font-size: 11px;
-            opacity: 0.8;
-          }
+      <div class="box">
+        <span class="label">Google Maps URL</span>
+        <span id="mapUrl" class="value">---</span>
+      </div>
 
-          /* =========================
-         MAIN
-      ========================= */
+      <!-- GOOGLE MAPS BUTTON -->
 
-          .main-container {
-            max-width: 1180px;
-          }
+      <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
-          /* =========================
-         HERO
-      ========================= */
+      <!-- GOOGLE SHEET STATUS -->
 
-          .hero {
-            background: linear-gradient(135deg, var(--blue), var(--dark-blue));
-            border-radius: 18px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(40, 116, 240, 0.22);
-          }
+      <div id="sheetStatus" class="sheet-status"></div>
 
-          .hero h1 {
-            font-size: 28px;
-            font-weight: 700;
-          }
+      <!-- COPY BUTTON -->
 
-          .hero p {
-            font-size: 14px;
-            opacity: 0.9;
-          }
+      <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
 
-          .hero-date {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            background: rgba(255, 255, 255, 0.14);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 11px 15px;
-            font-size: 13px;
-          }
+      <div class="small">GPS accuracy device aur surroundings par depend karti hai. Outdoor area mein accuracy generally better hoti hai.</div>
+    </div>
 
-          /* =========================
-         COMMON CARD
-      ========================= */
-
-          .dashboard-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.045);
-          }
-
-          .section-title {
-            font-size: 19px;
-            font-weight: 700;
-          }
-
-          .section-subtitle {
-            color: var(--muted);
-            font-size: 12px;
-          }
-
-          /* =========================
-         ORDER INPUT
-      ========================= */
-
-          .input-wrapper {
-            position: relative;
-          }
-
-          .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--muted);
-            z-index: 5;
-          }
-
-          .order-input {
-            height: 54px;
-            border: 1px solid #d9dee8;
-            border-radius: 12px;
-            padding-left: 43px;
-            font-size: 15px;
-          }
-
-          .order-input:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
-          }
-
-          .calculate-btn {
-            height: 54px;
-            border: none;
-            border-radius: 12px;
-            background: var(--blue);
-            font-size: 15px;
-            font-weight: 700;
-            transition: 0.2s;
-          }
-
-          .calculate-btn:hover {
-            background: var(--dark-blue);
-            transform: translateY(-1px);
-          }
-
-          /* =========================
-         PROGRESS
-      ========================= */
-
-          .progress {
-            height: 14px;
-            background: #edf1f7;
-            border-radius: 30px;
-            overflow: hidden;
-          }
-
-          .progress-bar {
-            background: linear-gradient(90deg, var(--blue), #43a5ff);
-            border-radius: 30px;
-            transition: width 0.5s ease;
-          }
-
-          .progress-number {
-            color: var(--blue);
-            font-size: 14px;
-            font-weight: 700;
-          }
-
-          .target {
-            color: var(--green);
-            font-weight: 700;
-            font-size: 13px;
-          }
-
-          /* =========================
-         SLAB
-      ========================= */
-
-          .slab-title {
-            font-size: 19px;
-            font-weight: 700;
-          }
-
-          .slab-badge {
-            display: inline-flex;
-            align-items: center;
-            background: #fff8d7;
-            color: #a97900;
-            padding: 7px 11px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-          }
-
-          .table {
-            margin-bottom: 0;
-          }
-
-          .table thead th {
-            background: #f7f9fc;
-            color: #667085;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 15px 14px;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-          }
-
-          .table tbody td {
-            padding: 15px 14px;
-            font-size: 14px;
-            vertical-align: middle;
-            border-bottom: 1px solid #edf0f4;
-          }
-
-          .table tbody tr:last-child td {
-            border-bottom: none;
-          }
-
-          .order-range {
-            font-weight: 700;
-          }
-
-          .incentive {
-            color: var(--green);
-            font-weight: 800;
-          }
-
-          .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 10px;
-            border-radius: 20px;
-            background: #eaf8ef;
-            color: #15803d;
-            font-size: 11px;
-            font-weight: 700;
-            white-space: nowrap;
-          }
-
-          #slabTable tr.active-row {
-            background: var(--light-blue) !important;
-            box-shadow: inset 0 0 0 1px rgba(40, 116, 240, 0.08);
-          }
-
-          #slabTable tr.active-row td {
-            background: var(--light-blue) !important;
-            font-weight: 700;
-          }
-
-          #slabTable tr.active-row td:first-child {
-            border-left: 4px solid var(--blue) !important;
-            padding-left: 10px;
-          }
-
-          #slabTable tr.active-row .order-range {
-            color: #172033;
-            font-weight: 800;
-          }
-
-          #slabTable tr.active-row .incentive {
-            color: var(--green);
-            font-weight: 900;
-          }
-
-          #slabTable .active-status {
-            background: var(--blue) !important;
-            color: white !important;
-            padding: 6px 11px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            white-space: nowrap;
-            box-shadow: 0 3px 8px rgba(40, 116, 240, 0.22);
-          }
-
-          /* =========================
-         BECOME A PARTNER
-      ========================= */
-
-          .partner-section {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #ffffff, #f7fbff);
-          }
-
-          .partner-header {
-            background: linear-gradient(135deg, var(--blue), var(--dark-blue));
-            color: #fff;
-            border-radius: 15px;
-            padding: 25px;
-          }
-
-          .partner-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-          }
-
-          .partner-header p {
-            margin: 0;
-            font-size: 13px;
-            opacity: 0.9;
-          }
-
-          .partner-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            flex-shrink: 0;
-          }
-
-          .form-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #344054;
-            margin-bottom: 7px;
-          }
-
-          .partner-form .form-control,
-          .partner-form .form-select {
-            min-height: 48px;
-            border: 1px solid #d9dee8;
-            border-radius: 10px;
-            font-size: 14px;
-          }
-
-          .partner-form textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-          }
-
-          .partner-form .form-control:focus,
-          .partner-form .form-select:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
-          }
-
-          .partner-submit {
-            min-height: 50px;
-            border: none;
-            border-radius: 11px;
-            background: var(--blue);
-            color: white;
-            font-weight: 700;
-            padding: 0 25px;
-            transition: 0.2s;
-          }
-
-          .partner-submit:hover {
-            background: var(--dark-blue);
-            transform: translateY(-1px);
-          }
-
-          .partner-benefits {
-            background: #f7f9fc;
-            border-radius: 12px;
-            padding: 15px;
-          }
-
-          .benefit-item {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            font-size: 12px;
-            color: #475467;
-            margin-bottom: 9px;
-          }
-
-          .benefit-item:last-child {
-            margin-bottom: 0;
-          }
-
-          .benefit-item i {
-            color: var(--green);
-            font-size: 15px;
-          }
-
-          /* =========================
-         FOOTER
-      ========================= */
-
-          .footer {
-            color: #8b95a7;
-            font-size: 12px;
-          }
-
-          /* =========================
-         MOBILE
-      ========================= */
-
-          @media (max-width: 767px) {
-            .main-navbar {
-              min-height: 64px;
-            }
-
-            .brand-logo {
-              width: 40px;
-              height: 40px;
-              font-size: 19px;
-            }
-
-            .brand-title {
-              font-size: 16px;
-            }
-
-            .brand-subtitle {
-              font-size: 10px;
-            }
-
-            .profile-text {
-              display: none;
-            }
-
-            .hero {
-              border-radius: 15px;
-            }
-
-            .hero h1 {
-              font-size: 23px;
-            }
-
-            .hero p {
-              font-size: 13px;
-            }
-
-            .dashboard-card {
-              border-radius: 15px;
-            }
-
-            .table {
-              min-width: 650px;
-            }
-
-            .calculate-btn {
-              width: 100%;
-            }
-
-            .partner-header {
-              padding: 20px;
-            }
-
-            .partner-header h2 {
-              font-size: 20px;
-            }
-
-            .partner-icon {
-              width: 48px;
-              height: 48px;
-              font-size: 21px;
-            }
-          }
-        </style>
-      </head>
-
-      <body>
-        <!-- =========================
-         NAVBAR
-    ========================= -->
-
-        <nav class="navbar main-navbar">
-          <div class="container-fluid px-3 px-md-4">
-            <div class="d-flex align-items-center gap-2">
-              <div class="brand-logo">FK</div>
-
-              <div class="text-white">
-                <div class="brand-title">Rider Partner</div>
-                <div class="brand-subtitle">Delivery Incentive Program</div>
-              </div>
-            </div>
-
-            <div class="d-flex align-items-center gap-2">
-              <div class="profile-text text-end text-white">
-                <div class="profile-name">Rider</div>
-                <div class="profile-status">Active Partner</div>
-              </div>
-
-              <div class="profile-icon text-white">
-                <i class="bi bi-person-fill"></i>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        <!-- =========================
-         MAIN
-    ========================= -->
-
-        <main class="container main-container py-4">
-          <!-- HERO -->
-
-          <section class="hero p-4 p-md-5 mb-4">
-            <div class="row align-items-center g-3">
-              <div class="col-md-8">
-                <h1 class="mb-2">Daily Rider Earnings</h1>
-
-                <p class="mb-0">Deliver more orders and unlock higher daily incentives.</p>
-              </div>
-
-              <div class="col-md-4 text-md-end">
-                <div class="hero-date">
-                  <i class="bi bi-calendar3"></i>
-
-                  <span id="todayDate"></span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- =========================
-           ORDER INPUT
-      ========================= -->
-
-          <section class="dashboard-card p-3 p-md-4 mb-4">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
-              <h2 class="section-title mb-0">
-                <i class="bi bi-box-seam me-1"></i>
-
-                Enter Today's Orders
-              </h2>
-
-              <span class="section-subtitle"> Update your delivered orders </span>
-            </div>
-
-            <div class="row g-3">
-              <div class="col-md">
-                <div class="input-wrapper">
-                  <i class="bi bi-box-seam input-icon"></i>
-
-                  <input type="number" id="orderInput" min="0" class="form-control order-input" placeholder="Enter total orders e.g. 250" />
-                </div>
-              </div>
-
-              <div class="col-md-auto">
-                <button type="button" class="btn btn-primary calculate-btn px-4" onclick="calculateEarning()">
-                  <i class="bi bi-calculator me-1"></i>
-
-                  Calculate Earnings
-                </button>
-              </div>
-            </div>
-          </section>
-
-          <!-- =========================
-           PROGRESS
-      ========================= -->
-
-          <section class="dashboard-card p-3 p-md-4 mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <strong id="slabName"> Current Slab </strong>
-
-              <span class="progress-number" id="progressText"> 0 / 51 </span>
-            </div>
-
-            <div class="progress">
-              <div id="progressFill" class="progress-bar" role="progressbar" style="width: 0%"></div>
-            </div>
-
-            <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-3">
-              <span class="section-subtitle" id="nextTarget"> Start delivering to unlock your first incentive. </span>
-
-              <span class="target" id="remainingText"> Target: 51 </span>
-            </div>
-          </section>
-
-          <!-- =========================
-           DAILY INCENTIVE SLABS
-      ========================= -->
-
-          <section class="dashboard-card p-3 p-md-4 mb-4">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
-              <h2 class="slab-title mb-0">
-                <i class="bi bi-trophy me-1"></i>
-
-                Daily Incentive Slabs
-              </h2>
-
-              <span class="slab-badge"> MORE ORDERS = MORE INCENTIVE </span>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table align-middle">
-                <thead>
-                  <tr>
-                    <th>ORDER RANGE</th>
-                    <th>EXTRA INCENTIVE</th>
-                    <th>STATUS</th>
-                  </tr>
-                </thead>
-
-                <tbody id="slabTable">
-                  <tr data-min="1" data-max="50">
-                    <td class="order-range">1 – 50 Orders</td>
-                    <td class="incentive">₹0</td>
-                    <td>
-                      <span class="status-badge">Normal</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="51" data-max="100">
-                    <td class="order-range">51 – 100 Orders</td>
-                    <td class="incentive">+ ₹50</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="101" data-max="150">
-                    <td class="order-range">101 – 150 Orders</td>
-                    <td class="incentive">+ ₹100</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="151" data-max="200">
-                    <td class="order-range">151 – 200 Orders</td>
-                    <td class="incentive">+ ₹150</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="201" data-max="250">
-                    <td class="order-range">201 – 250 Orders</td>
-                    <td class="incentive">+ ₹200</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="251" data-max="300">
-                    <td class="order-range">251 – 300 Orders</td>
-                    <td class="incentive">+ ₹250</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="301" data-max="350">
-                    <td class="order-range">301 – 350 Orders</td>
-                    <td class="incentive">+ ₹300</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="351" data-max="400">
-                    <td class="order-range">351 – 400 Orders</td>
-                    <td class="incentive">+ ₹350</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="401" data-max="450">
-                    <td class="order-range">401 – 450 Orders</td>
-                    <td class="incentive">+ ₹400</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="451" data-max="500">
-                    <td class="order-range">451 – 500 Orders</td>
-                    <td class="incentive">+ ₹450</td>
-                    <td>
-                      <span class="status-badge">Incentive</span>
-                    </td>
-                  </tr>
-
-                  <tr data-min="501" data-max="999999">
-                    <td class="order-range">500+ Orders</td>
-                    <td class="incentive" id="maximumIncentive">₹500+</td>
-                    <td>
-                      <span class="status-badge"> Maximum Slab </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!-- ==================================================
-           BECOME A PARTNER
-      ================================================== -->
-
-          <section class="dashboard-card partner-section p-3 p-md-4 mb-4">
-            <!-- PARTNER HEADER -->
-
-            <div class="partner-header mb-4">
-              <div class="d-flex align-items-center gap-3">
-                <div class="partner-icon">
-                  <i class="bi bi-person-plus-fill"></i>
-                </div>
-
-                <div>
-                  <h2>Become a Partner</h2>
-
-                  <p>Join our rider partner network and start earning with us.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- FORM -->
-
-            <form id="partnerForm" class="partner-form" onsubmit="submitPartnerForm(event)">
-              <div class="row g-3">
-                <!-- FULL NAME -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Full Name <span class="text-danger">*</span> </label>
-
-                  <input type="text" id="partnerName" class="form-control" placeholder="Enter your full name" required />
-                </div>
-
-                <!-- MOBILE -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Mobile Number <span class="text-danger">*</span> </label>
-
-                  <input
-                    type="tel"
-                    id="partnerMobile"
-                    class="form-control"
-                    placeholder="Enter 10 digit mobile number"
-                    pattern="[0-9]{10}"
-                    maxlength="10"
-                    required
-                  />
-                </div>
-
-                <!-- EMAIL -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Email Address </label>
-
-                  <input type="email" id="partnerEmail" class="form-control" placeholder="Enter your email address" />
-                </div>
-
-                <!-- CITY -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> City <span class="text-danger">*</span> </label>
-
-                  <input type="text" id="partnerCity" class="form-control" placeholder="Enter your city" required />
-                </div>
-
-                <!-- VEHICLE TYPE -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Vehicle Type <span class="text-danger">*</span> </label>
-
-                  <select id="vehicleType" class="form-select" required>
-                    <option value="">Select vehicle type</option>
-
-                    <option value="Bike">Bike</option>
-
-                    <option value="Scooter">Scooter</option>
-
-                    <option value="Electric Bike">Electric Bike</option>
-
-                    <option value="Electric Scooter">Electric Scooter</option>
-                  </select>
-                </div>
-
-                <!-- VEHICLE NUMBER -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Vehicle Number </label>
-
-                  <input type="text" id="vehicleNumber" class="form-control" placeholder="e.g. RJ14AB1234" />
-                </div>
-
-                <!-- DL NUMBER -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Driving License Number </label>
-
-                  <input type="text" id="licenseNumber" class="form-control" placeholder="Enter driving license number" />
-                </div>
-
-                <!-- EXPERIENCE -->
-
-                <div class="col-md-6">
-                  <label class="form-label"> Delivery Experience </label>
-
-                  <select id="experience" class="form-select">
-                    <option value="">Select experience</option>
-
-                    <option value="Fresher">Fresher</option>
-
-                    <option value="Less than 1 Year">Less than 1 Year</option>
-
-                    <option value="1 - 2 Years">1 - 2 Years</option>
-
-                    <option value="2 - 5 Years">2 - 5 Years</option>
-
-                    <option value="5+ Years">5+ Years</option>
-                  </select>
-                </div>
-
-                <!-- ADDRESS -->
-
-                <div class="col-12">
-                  <label class="form-label"> Full Address <span class="text-danger">*</span> </label>
-
-                  <textarea id="partnerAddress" class="form-control" placeholder="Enter your complete address" required></textarea>
-                </div>
-
-                <!-- BENEFITS -->
-
-                <div class="col-12">
-                  <div class="partner-benefits">
-                    <div class="benefit-item">
-                      <i class="bi bi-check-circle-fill"></i>
-                      Flexible delivery opportunities
-                    </div>
-
-                    <div class="benefit-item">
-                      <i class="bi bi-check-circle-fill"></i>
-                      Daily incentive opportunities
-                    </div>
-
-                    <div class="benefit-item">
-                      <i class="bi bi-check-circle-fill"></i>
-                      Performance-based earnings
-                    </div>
-                  </div>
-                </div>
-
-                <!-- SUBMIT -->
-
-                <div class="col-12 text-md-end pt-2">
-                  <button type="submit" class="partner-submit">
-                    <i class="bi bi-send-fill me-2"></i>
-
-                    Submit Partner Application
-                  </button>
-                </div>
-              </div>
-            </form>
-          </section>
-
-          <!-- FOOTER -->
-
-          <div class="footer text-center py-4">Rider Incentive System • Daily Performance Dashboard</div>
-        </main>
-
-        <!-- =========================
-         JAVASCRIPT
-    ========================= -->
-
-        <script>
-          /* =========================
-         TODAY DATE
-      ========================= */
-
-          const today = new Date();
-
-          document.getElementById("todayDate").innerText = today.toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          });
-
-          /* =========================
-         CALCULATE EARNING
-      ========================= */
-
-          function calculateEarning() {
-            const input = document.getElementById("orderInput");
-
-            let orders = parseInt(input.value);
-
-            if (isNaN(orders) || orders < 0) {
-              orders = 0;
-
-              input.value = "";
-            }
-
-            let incentive = 0;
-
-            let nextTarget = 51;
-
-            let slabName = "1 – 50 Orders";
-
-            if (orders >= 501) {
-              incentive = 500 + Math.floor((orders - 500) / 50) * 50;
-
-              nextTarget = Math.ceil((orders + 1) / 50) * 50;
-
-              slabName = "500+ Orders";
-            } else if (orders >= 451) {
-              incentive = 450;
-              nextTarget = 501;
-              slabName = "451 – 500 Orders";
-            } else if (orders >= 401) {
-              incentive = 400;
-              nextTarget = 451;
-              slabName = "401 – 450 Orders";
-            } else if (orders >= 351) {
-              incentive = 350;
-              nextTarget = 401;
-              slabName = "351 – 400 Orders";
-            } else if (orders >= 301) {
-              incentive = 300;
-              nextTarget = 351;
-              slabName = "301 – 350 Orders";
-            } else if (orders >= 251) {
-              incentive = 250;
-              nextTarget = 301;
-              slabName = "251 – 300 Orders";
-            } else if (orders >= 201) {
-              incentive = 200;
-              nextTarget = 251;
-              slabName = "201 – 250 Orders";
-            } else if (orders >= 151) {
-              incentive = 150;
-              nextTarget = 201;
-              slabName = "151 – 200 Orders";
-            } else if (orders >= 101) {
-              incentive = 100;
-              nextTarget = 151;
-              slabName = "101 – 150 Orders";
-            } else if (orders >= 51) {
-              incentive = 50;
-              nextTarget = 101;
-              slabName = "51 – 100 Orders";
-            } else {
-              incentive = 0;
-              nextTarget = 51;
-              slabName = "1 – 50 Orders";
-            }
-
-            let previousTarget = nextTarget - 50;
-
-            if (orders >= 500) {
-              previousTarget = 500;
-            }
-
-            let progress = ((orders - previousTarget) / (nextTarget - previousTarget)) * 100;
-
-            if (orders < previousTarget) {
-              progress = 0;
-            }
-
-            if (progress > 100) {
-              progress = 100;
-            }
-
-            if (progress < 0) {
-              progress = 0;
-            }
-
-            document.getElementById("progressFill").style.width = progress + "%";
-
-            document.getElementById("slabName").innerText = slabName;
-
-            document.getElementById("progressText").innerText = orders + " / " + nextTarget;
-
-            document.getElementById("remainingText").innerText = "Target: " + nextTarget;
-
-            if (orders >= 500) {
-              document.getElementById("nextTarget").innerText = "🔥 Excellent performance! Keep delivering and increase your incentive.";
-            } else if (orders > 0) {
-              const remaining = nextTarget - orders;
-
-              document.getElementById("nextTarget").innerText = "🎯 Only " + remaining + " more orders to reach the next slab.";
-            } else {
-              document.getElementById("nextTarget").innerText = "Start delivering to unlock your first incentive.";
-            }
-
-            if (orders >= 501) {
-              document.getElementById("maximumIncentive").innerText = "₹" + incentive + "+";
-            } else {
-              document.getElementById("maximumIncentive").innerText = "₹500+";
-            }
-
-            const rows = document.querySelectorAll("#slabTable tr");
-
-            rows.forEach(function (row) {
-              row.classList.remove("active-row");
-
-              const badge = row.querySelector(".status-badge");
-
-              badge.classList.remove("active-status");
-
-              const min = parseInt(row.dataset.min);
-
-              if (min === 1) {
-                badge.innerText = "Normal";
-              } else if (min === 501) {
-                badge.innerText = "Maximum Slab";
-              } else {
-                badge.innerText = "Incentive";
-              }
-            });
-
-            rows.forEach(function (row) {
-              const min = parseInt(row.dataset.min);
-
-              const max = parseInt(row.dataset.max);
-
-              if (orders >= min && orders <= max) {
-                row.classList.add("active-row");
-
-                const badge = row.querySelector(".status-badge");
-
-                badge.classList.add("active-status");
-
-                badge.innerText = "✓ Current Slab";
-              }
-            });
-          }
-
-          /* =========================
-         ENTER KEY
-      ========================= */
-
-          document.getElementById("orderInput").addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-              calculateEarning();
-            }
-          });
-
-          /* =========================
-         ORDER VALIDATION
-      ========================= */
-
-          document.getElementById("orderInput").addEventListener("input", function () {
-            if (this.value < 0) {
-              this.value = 0;
-            }
-          });
-
-          /* =========================
-         PARTNER FORM
-      ========================= */
-
-          function submitPartnerForm(event) {
-            event.preventDefault();
-
-            const name = document.getElementById("partnerName").value.trim();
-
-            const mobile = document.getElementById("partnerMobile").value.trim();
-
-            const city = document.getElementById("partnerCity").value.trim();
-
-            const vehicleType = document.getElementById("vehicleType").value;
-
-            const address = document.getElementById("partnerAddress").value.trim();
-
-            if (!name || !mobile || !city || !vehicleType || !address) {
-              alert("Please fill all required fields.");
-
-              return;
-            }
-
-            if (!/^[0-9]{10}$/.test(mobile)) {
-              alert("Please enter a valid 10 digit mobile number.");
-
-              return;
-            }
-
-            /*
-          Currently this is a frontend-only form.
-
-          Later you can connect this form
-          with Google Sheets, EmailJS,
-          PHP + MySQL, or an API.
-        */
-
-            alert("🎉 Thank you " + name + "!\n\n" + "Your Partner Application has been submitted successfully.");
-
-            document.getElementById("partnerForm").reset();
-          }
-        </script>
-
-        <!----==================================================----->
-        <!----==================================================----->
-        <!----==================================================----->
-        <!----==================================================----->
-        <!----==================================================----->
-        <div class="dis">
-          <div class="card">
-            <h2>📍 GPS Location</h2>
-
-            <div id="status" class="status">📡 Location permission required...</div>
-
-            <!-- LATITUDE -->
-
-            <div class="box">
-              <span class="label">Latitude</span>
-              <span id="lat" class="value">---</span>
-            </div>
-
-            <!-- LONGITUDE -->
-
-            <div class="box">
-              <span class="label">Longitude</span>
-              <span id="lon" class="value">---</span>
-            </div>
-
-            <!-- ACCURACY -->
-
-            <div class="box">
-              <span class="label">GPS Accuracy</span>
-              <span id="accuracy" class="value">---</span>
-            </div>
-
-            <!-- READING -->
-
-            <div class="box">
-              <span class="label">Best Reading</span>
-              <span id="reading" class="value">---</span>
-            </div>
-
-            <!-- MAP URL -->
-
-            <div class="box">
-              <span class="label">Google Maps URL</span>
-              <span id="mapUrl" class="value">---</span>
-            </div>
-
-            <!-- GOOGLE MAPS BUTTON -->
-
-            <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
-
-            <!-- GOOGLE SHEET STATUS -->
-
-            <div id="sheetStatus" class="sheet-status"></div>
-
-            <!-- COPY BUTTON -->
-
-            <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
-
-            <div class="small">GPS accuracy device aur surroundings par depend karti hai. Outdoor area mein accuracy generally better hoti hai.</div>
-          </div>
-        </div>
-        <script>
-          /* =========================================================
+    <script>
+      /* =========================================================
    GOOGLE APPS SCRIPT WEB APP URL
 ========================================================= */
 
-          const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
+      const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
 
-          /* =========================================================
+      /* =========================================================
    GPS VARIABLES
 ========================================================= */
 
-          let bestPosition = null;
+      let bestPosition = null;
 
-          let watchId = null;
+      let watchId = null;
 
-          let readings = 0;
+      let readings = 0;
 
-          let sheetAlreadySaved = false;
+      let sheetAlreadySaved = false;
 
-          let autoSaveStarted = false;
+      let autoSaveStarted = false;
 
-          /* =========================================================
+      /* =========================================================
    GPS SETTINGS
 ========================================================= */
 
-          const MAX_READINGS = 10;
+      const MAX_READINGS = 10;
 
-          /* =========================================================
+      /* =========================================================
    PAGE LOAD
 ========================================================= */
 
-          window.addEventListener("load", function () {
-            console.log("🚀 Page loaded");
+      window.addEventListener("load", function () {
+        console.log("🚀 Page loaded");
 
-            startGPS();
-          });
+        startGPS();
+      });
 
-          /* =========================================================
+      /* =========================================================
    START GPS
 ========================================================= */
 
-          function startGPS() {
-            const status = document.getElementById("status");
+      function startGPS() {
+        const status = document.getElementById("status");
 
-            /* GPS SUPPORT CHECK */
+        /* GPS SUPPORT CHECK */
 
-            if (!navigator.geolocation) {
-              status.innerHTML = "❌ Browser GPS support nahi karta.";
+        if (!navigator.geolocation) {
+          status.innerHTML = "❌ Browser GPS support nahi karta.";
 
-              return;
-            }
+          return;
+        }
 
-            /* HTTPS CHECK */
+        /* HTTPS CHECK */
 
-            if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
-              status.innerHTML = "⚠️ GPS ke liye HTTPS ya localhost required hai.";
+        if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+          status.innerHTML = "⚠️ GPS ke liye HTTPS ya localhost required hai.";
 
-              return;
-            }
+          return;
+        }
 
-            status.innerHTML = "📍 Location permission Allow karein...";
+        status.innerHTML = "📍 Location permission Allow karein...";
 
-            /* =====================================================
+        /* =====================================================
      WATCH GPS
   ===================================================== */
 
-            watchId = navigator.geolocation.watchPosition(
-              function (position) {
-                readings++;
+        watchId = navigator.geolocation.watchPosition(
+          function (position) {
+            readings++;
 
-                const accuracy = position.coords.accuracy;
+            const accuracy = position.coords.accuracy;
 
-                console.log("📡 GPS Reading:", readings, "Accuracy:", accuracy);
+            console.log("📡 GPS Reading:", readings, "Accuracy:", accuracy);
 
-                /* =================================================
+            /* =================================================
          BEST ACCURACY LOCATION
       ================================================= */
 
-                if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
-                  bestPosition = position;
+            if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
+              bestPosition = position;
 
-                  showPosition(position);
+              showPosition(position);
 
-                  createMapURL(position);
+              createMapURL(position);
 
-                  showButtons();
+              showButtons();
 
-                  /* =============================================
+              /* =============================================
            1 SECOND TIMER
            
            LOCATION MILNE KE BAAD
@@ -1467,307 +323,270 @@
            PHIR SAVE
         ============================================= */
 
-                  if (!autoSaveStarted) {
-                    autoSaveStarted = true;
+              if (!autoSaveStarted) {
+                autoSaveStarted = true;
 
-                    console.log("⏳ 1 second timer started...");
+                console.log("⏳ 1 second timer started...");
 
-                    status.innerHTML = "📍 Location found. Saving in 1 second...";
+                status.innerHTML = "📍 Location found. Saving in 1 second...";
 
-                    setTimeout(function () {
-                      console.log("⏰ Timer complete.");
+                setTimeout(function () {
+                  console.log("⏰ Timer complete.");
 
-                      saveToGoogleSheet();
-                    }, 1000);
-                  }
-                }
+                  saveToGoogleSheet();
+                }, 1000);
+              }
+            }
 
-                /* =================================================
+            /* =================================================
          MAX READINGS
       ================================================= */
 
-                if (readings >= MAX_READINGS) {
-                  finishGPS();
-                }
-              },
+            if (readings >= MAX_READINGS) {
+              finishGPS();
+            }
+          },
 
-              /* =====================================================
+          /* =====================================================
        GPS ERROR
     ===================================================== */
 
-              function (error) {
-                console.error("❌ GPS ERROR:", error);
+          function (error) {
+            console.error("❌ GPS ERROR:", error);
 
-                if (error.code === 1) {
-                  status.innerHTML = "❌ Location permission denied.<br><br>" + "Browser settings mein Location Allow karein.";
-                } else if (error.code === 2) {
-                  status.innerHTML = "❌ Location unavailable.<br><br>" + "Phone ki Location/GPS ON karein.";
-                } else if (error.code === 3) {
-                  status.innerHTML = "❌ GPS timeout.<br><br>" + "Open area mein dobara try karein.";
-                } else {
-                  status.innerHTML = "❌ GPS location nahi mil saki.";
-                }
-              },
+            if (error.code === 1) {
+              status.innerHTML = "❌ Location permission denied.<br><br>" + "Browser settings mein Location Allow karein.";
+            } else if (error.code === 2) {
+              status.innerHTML = "❌ Location unavailable.<br><br>" + "Phone ki Location/GPS ON karein.";
+            } else if (error.code === 3) {
+              status.innerHTML = "❌ GPS timeout.<br><br>" + "Open area mein dobara try karein.";
+            } else {
+              status.innerHTML = "❌ GPS location nahi mil saki.";
+            }
+          },
 
-              /* =====================================================
+          /* =====================================================
        GPS OPTIONS
     ===================================================== */
 
-              {
-                enableHighAccuracy: true,
+          {
+            enableHighAccuracy: true,
 
-                timeout: 30000,
+            timeout: 30000,
 
-                maximumAge: 0,
-              },
-            );
-          }
+            maximumAge: 0,
+          },
+        );
+      }
 
-          /* =========================================================
+      /* =========================================================
    SHOW POSITION
 ========================================================= */
 
-          function showPosition(position) {
-            const latitude = position.coords.latitude;
+      function showPosition(position) {
+        const latitude = position.coords.latitude;
 
-            const longitude = position.coords.longitude;
+        const longitude = position.coords.longitude;
 
-            const accuracy = position.coords.accuracy;
+        const accuracy = position.coords.accuracy;
 
-            document.getElementById("lat").innerHTML = latitude.toFixed(8);
+        document.getElementById("lat").innerHTML = latitude.toFixed(8);
 
-            document.getElementById("lon").innerHTML = longitude.toFixed(8);
+        document.getElementById("lon").innerHTML = longitude.toFixed(8);
 
-            document.getElementById("accuracy").innerHTML = accuracy.toFixed(2) + " meters";
+        document.getElementById("accuracy").innerHTML = accuracy.toFixed(2) + " meters";
 
-            document.getElementById("reading").innerHTML = readings + " / " + MAX_READINGS;
+        document.getElementById("reading").innerHTML = readings + " / " + MAX_READINGS;
 
-            const status = document.getElementById("status");
+        const status = document.getElementById("status");
 
-            if (accuracy <= 10) {
-              status.innerHTML = "✅ Excellent GPS accuracy: " + accuracy.toFixed(2) + " meters";
-            } else if (accuracy <= 30) {
-              status.innerHTML = "✅ Good GPS accuracy: " + accuracy.toFixed(2) + " meters";
-            } else {
-              status.innerHTML = "📍 Location found. Accuracy: " + accuracy.toFixed(2) + " meters";
-            }
-          }
+        if (accuracy <= 10) {
+          status.innerHTML = "✅ Excellent GPS accuracy: " + accuracy.toFixed(2) + " meters";
+        } else if (accuracy <= 30) {
+          status.innerHTML = "✅ Good GPS accuracy: " + accuracy.toFixed(2) + " meters";
+        } else {
+          status.innerHTML = "📍 Location found. Accuracy: " + accuracy.toFixed(2) + " meters";
+        }
+      }
 
-          /* =========================================================
+      /* =========================================================
    GOOGLE MAP URL
 ========================================================= */
 
-          function createMapURL(position) {
-            const latitude = position.coords.latitude;
+      function createMapURL(position) {
+        const latitude = position.coords.latitude;
 
-            const longitude = position.coords.longitude;
+        const longitude = position.coords.longitude;
 
-            const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+        const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-            document.getElementById("mapUrl").innerHTML = url;
+        document.getElementById("mapUrl").innerHTML = url;
 
-            const mapBtn = document.getElementById("mapBtn");
+        const mapBtn = document.getElementById("mapBtn");
 
-            mapBtn.href = url;
+        mapBtn.href = url;
 
-            mapBtn.style.display = "block";
-          }
+        mapBtn.style.display = "block";
+      }
 
-          /* =========================================================
+      /* =========================================================
    SHOW BUTTONS
 ========================================================= */
 
-          function showButtons() {
-            document.getElementById("mapBtn").style.display = "block";
+      function showButtons() {
+        document.getElementById("mapBtn").style.display = "block";
 
-            document.getElementById("copyBtn").style.display = "block";
-          }
+        document.getElementById("copyBtn").style.display = "block";
+      }
 
-          /* =========================================================
+      /* =========================================================
    FINISH GPS
 ========================================================= */
 
-          function finishGPS() {
-            if (watchId !== null) {
-              navigator.geolocation.clearWatch(watchId);
+      function finishGPS() {
+        if (watchId !== null) {
+          navigator.geolocation.clearWatch(watchId);
 
-              watchId = null;
-            }
+          watchId = null;
+        }
 
-            if (bestPosition) {
-              showPosition(bestPosition);
+        if (bestPosition) {
+          showPosition(bestPosition);
 
-              createMapURL(bestPosition);
+          createMapURL(bestPosition);
 
-              showButtons();
-            }
-          }
+          showButtons();
+        }
+      }
 
-          /* =========================================================
+      /* =========================================================
    SAVE TO GOOGLE SHEET
    AUTOMATIC FUNCTION
 ========================================================= */
 
-          function saveToGoogleSheet() {
-            /* LOCATION CHECK */
+      function saveToGoogleSheet() {
+        /* LOCATION CHECK */
 
-            if (!bestPosition) {
-              console.log("❌ Location available nahi hai.");
+        if (!bestPosition) {
+          console.log("❌ Location available nahi hai.");
 
-              return;
-            }
+          return;
+        }
 
-            /* DUPLICATE CHECK */
+        /* DUPLICATE CHECK */
 
-            if (sheetAlreadySaved) {
-              console.log("⚠️ Data already saved.");
+        if (sheetAlreadySaved) {
+          console.log("⚠️ Data already saved.");
 
-              return;
-            }
+          return;
+        }
 
-            const latitude = bestPosition.coords.latitude;
+        const latitude = bestPosition.coords.latitude;
 
-            const longitude = bestPosition.coords.longitude;
+        const longitude = bestPosition.coords.longitude;
 
-            const accuracy = bestPosition.coords.accuracy;
+        const accuracy = bestPosition.coords.accuracy;
 
-            const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+        const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-            const dateTime = new Date().toLocaleString("en-IN");
+        const dateTime = new Date().toLocaleString("en-IN");
 
-            /* =====================================================
+        /* =====================================================
      DATA
   ===================================================== */
 
-            const data = {
-              dateTime: dateTime,
+        const data = {
+          dateTime: dateTime,
 
-              latitude: latitude.toFixed(8),
+          latitude: latitude.toFixed(8),
 
-              longitude: longitude.toFixed(8),
+          longitude: longitude.toFixed(8),
 
-              accuracy: accuracy.toFixed(2),
+          accuracy: accuracy.toFixed(2),
 
-              mapsUrl: mapsURL,
-            };
+          mapsUrl: mapsURL,
+        };
 
-            console.log("📤 Sending Google Sheet Data:", data);
+        console.log("📤 Sending Google Sheet Data:", data);
 
-            const sheetStatus = document.getElementById("sheetStatus");
+        const sheetStatus = document.getElementById("sheetStatus");
 
-            sheetStatus.style.display = "block";
+        sheetStatus.style.display = "block";
 
-            sheetStatus.style.background = "#eff6ff";
+        sheetStatus.style.background = "#eff6ff";
 
-            sheetStatus.style.color = "#1d4ed8";
+        sheetStatus.style.color = "#1d4ed8";
 
-            sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
+        sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
 
-            /* =====================================================
+        /* =====================================================
      API REQUEST
   ===================================================== */
 
-            fetch(
-              GOOGLE_SHEET_API,
+        fetch(
+          GOOGLE_SHEET_API,
 
-              {
-                method: "POST",
+          {
+            method: "POST",
 
-                mode: "no-cors",
+            mode: "no-cors",
 
-                headers: {
-                  "Content-Type": "text/plain;charset=utf-8",
-                },
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
 
-                body: JSON.stringify(data),
-              },
-            )
-              .then(function () {
-                sheetAlreadySaved = true;
+            body: JSON.stringify(data),
+          },
+        )
+          .then(function () {
+            sheetAlreadySaved = true;
 
-                sheetStatus.style.background = "#f0fdf4";
+            sheetStatus.style.background = "#f0fdf4";
 
-                sheetStatus.style.color = "#15803d";
+            sheetStatus.style.color = "#15803d";
 
-                sheetStatus.innerHTML =
-                  "✅ <b>Location saved to Google Sheet!</b><br>" +
-                  "<small>" +
-                  "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." +
-                  "</small>";
+            sheetStatus.innerHTML =
+              "✅ <b>Location saved to Google Sheet!</b><br>" +
+              "<small>" +
+              "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." +
+              "</small>";
 
-                console.log("✅ Google Sheet request sent successfully.");
-              })
+            console.log("✅ Google Sheet request sent successfully.");
+          })
 
-              .catch(function (error) {
-                console.error("❌ Google Sheet Error:", error);
+          .catch(function (error) {
+            console.error("❌ Google Sheet Error:", error);
 
-                sheetStatus.style.background = "#fef2f2";
+            sheetStatus.style.background = "#fef2f2";
 
-                sheetStatus.style.color = "#dc2626";
+            sheetStatus.style.color = "#dc2626";
 
-                sheetStatus.innerHTML = "❌ Google Sheet request failed.";
-              });
-          }
+            sheetStatus.innerHTML = "❌ Google Sheet request failed.";
+          });
+      }
 
-          /* =========================================================
+      /* =========================================================
    COPY GOOGLE MAPS URL
 ========================================================= */
 
-          function copyLocation() {
-            if (!bestPosition) {
-              alert("❌ Location available nahi hai.");
+      function copyLocation() {
+        if (!bestPosition) {
+          alert("❌ Location available nahi hai.");
 
-              return;
-            }
+          return;
+        }
 
-            const latitude = bestPosition.coords.latitude;
+        const latitude = bestPosition.coords.latitude;
 
-            const longitude = bestPosition.coords.longitude;
+        const longitude = bestPosition.coords.longitude;
 
-            const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+        const url = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard
-                .writeText(url)
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(url)
 
-                .then(function () {
-                  const button = document.getElementById("copyBtn");
-
-                  button.innerHTML = "✅ URL Copied!";
-
-                  setTimeout(function () {
-                    button.innerHTML = "📋 Copy Google Maps URL";
-                  }, 2000);
-                })
-
-                .catch(function () {
-                  fallbackCopy(url);
-                });
-            } else {
-              fallbackCopy(url);
-            }
-          }
-
-          /* =========================================================
-   FALLBACK COPY
-========================================================= */
-
-          function fallbackCopy(text) {
-            const textarea = document.createElement("textarea");
-
-            textarea.value = text;
-
-            textarea.style.position = "fixed";
-
-            textarea.style.left = "-9999px";
-
-            document.body.appendChild(textarea);
-
-            textarea.select();
-
-            try {
-              document.execCommand("copy");
-
+            .then(function () {
               const button = document.getElementById("copyBtn");
 
               button.innerHTML = "✅ URL Copied!";
@@ -1775,18 +594,49 @@
               setTimeout(function () {
                 button.innerHTML = "📋 Copy Google Maps URL";
               }, 2000);
-            } catch (error) {
-              alert("Google Maps URL:\n\n" + text);
-            }
+            })
 
-            document.body.removeChild(textarea);
-          }
-        </script>
+            .catch(function () {
+              fallbackCopy(url);
+            });
+        } else {
+          fallbackCopy(url);
+        }
+      }
 
-        <!-- Bootstrap JS -->
+      /* =========================================================
+   FALLBACK COPY
+========================================================= */
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-      </body>
-    </html>
+      function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+
+        textarea.style.position = "fixed";
+
+        textarea.style.left = "-9999px";
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+
+          const button = document.getElementById("copyBtn");
+
+          button.innerHTML = "✅ URL Copied!";
+
+          setTimeout(function () {
+            button.innerHTML = "📋 Copy Google Maps URL";
+          }, 2000);
+        } catch (error) {
+          alert("Google Maps URL:\n\n" + text);
+        }
+
+        document.body.removeChild(textarea);
+      }
+    </script>
   </body>
 </html>
