@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -100,7 +101,6 @@
       }
 
       .map-btn,
-      .save-btn,
       .copy-btn {
         display: none;
 
@@ -135,44 +135,12 @@
         background: #15803d;
       }
 
-      .save-btn {
-        background: #2563eb;
-      }
-
-      .save-btn:hover {
-        background: #1d4ed8;
-      }
-
-      .save-btn:disabled {
-        background: #94a3b8;
-
-        cursor: not-allowed;
-      }
-
       .copy-btn {
         background: #111827;
       }
 
       .copy-btn:hover {
         background: #000000;
-      }
-
-      .sheet-status {
-        display: none;
-
-        padding: 14px;
-
-        margin-top: 12px;
-
-        border-radius: 10px;
-
-        text-align: center;
-
-        font-size: 13px;
-
-        font-weight: bold;
-
-        line-height: 1.5;
       }
 
       .small {
@@ -191,47 +159,33 @@
 
   <body>
     <div class="card">
+      ```
       <h2>📍 GPS Location</h2>
 
-      <div id="status" class="status">📡 Location permission required...</div>
-
-      <!-- LATITUDE -->
+      <div id="status" class="status">📍 Location permission Allow karein...</div>
 
       <div class="box">
         <span class="label">Latitude</span>
-
         <span id="lat" class="value">---</span>
       </div>
 
-      <!-- LONGITUDE -->
-
       <div class="box">
         <span class="label">Longitude</span>
-
         <span id="lon" class="value">---</span>
       </div>
 
-      <!-- ACCURACY -->
-
       <div class="box">
         <span class="label">GPS Accuracy</span>
-
         <span id="accuracy" class="value">---</span>
       </div>
 
-      <!-- READING -->
-
       <div class="box">
         <span class="label">Best Reading</span>
-
         <span id="reading" class="value">---</span>
       </div>
 
-      <!-- MAP URL -->
-
       <div class="box">
         <span class="label">Google Maps URL</span>
-
         <span id="mapUrl" class="value">---</span>
       </div>
 
@@ -239,30 +193,25 @@
 
       <a id="mapBtn" class="map-btn" target="_blank" rel="noopener noreferrer"> 🗺️ Open Location in Google Maps </a>
 
-      <!-- SAVE -->
-
-      <button id="saveBtn" class="save-btn" type="button" onclick="saveToGoogleSheet()">💾 Save Location</button>
-
-      <!-- SHEET STATUS -->
-
-      <div id="sheetStatus" class="sheet-status"></div>
-
       <!-- COPY -->
 
       <button id="copyBtn" class="copy-btn" type="button" onclick="copyLocation()">📋 Copy Google Maps URL</button>
 
       <div class="small">GPS accuracy device aur surroundings par depend karti hai. Outdoor area mein accuracy generally better hoti hai.</div>
+      ```
     </div>
 
     <script>
       /* =========================================================
-   GOOGLE APPS SCRIPT WEB APP
+   GOOGLE APPS SCRIPT WEB APP URL
+
+   AAPKA CURRENT URL
 ========================================================= */
 
       const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby_BxHYfoPGf0Hy-ssCBxVPhwzobxpjaFyUgxJV7qkgOMBfYq5dHhDzUp8lm0sfwsw2/exec";
 
       /* =========================================================
-   GPS SETTINGS
+   GPS VARIABLES
 ========================================================= */
 
       let bestPosition = null;
@@ -276,11 +225,11 @@
       const MAX_READINGS = 10;
 
       /* =========================================================
-   PAGE LOAD
+   PAGE OPEN
 ========================================================= */
 
       window.addEventListener("load", function () {
-        console.log("Page loaded");
+        console.log("Page opened");
 
         startGPS();
       });
@@ -292,19 +241,27 @@
       function startGPS() {
         const status = document.getElementById("status");
 
+        /* GPS SUPPORT */
+
         if (!navigator.geolocation) {
           status.innerHTML = "❌ Browser GPS support nahi karta.";
 
           return;
         }
 
+        /* HTTPS CHECK */
+
         if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
-          status.innerHTML = "⚠️ GPS ke liye HTTPS ya localhost required hai.";
+          status.innerHTML = "⚠️ GPS ke liye HTTPS required hai.";
 
           return;
         }
 
         status.innerHTML = "📍 Location permission Allow karein...";
+
+        /* =====================================================
+     GPS WATCH
+  ===================================================== */
 
         watchId = navigator.geolocation.watchPosition(
           function (position) {
@@ -315,8 +272,8 @@
             console.log("GPS Reading:", readings, "Accuracy:", accuracy);
 
             /*
-          Sirf better accuracy wali
-          location ko save/display karenge.
+          Sirf BEST accuracy wali
+          location rakhenge.
         */
 
             if (bestPosition === null || accuracy < bestPosition.coords.accuracy) {
@@ -325,16 +282,27 @@
               showPosition(position);
 
               createMapURL(position);
-
-              showButtons();
             }
 
             /*
-          10 readings ke baad GPS stop
+          Agar 20 meter ya usse better
+          accuracy mil gayi to save.
+        */
+
+            if (accuracy <= 20) {
+              finishGPS();
+
+              return;
+            }
+
+            /*
+          Maximum 10 readings.
         */
 
             if (readings >= MAX_READINGS) {
               finishGPS();
+
+              return;
             }
           },
 
@@ -408,18 +376,8 @@
         const mapBtn = document.getElementById("mapBtn");
 
         mapBtn.href = url;
-      }
 
-      /* =========================================================
-   SHOW BUTTONS
-========================================================= */
-
-      function showButtons() {
-        document.getElementById("mapBtn").style.display = "block";
-
-        document.getElementById("saveBtn").style.display = "block";
-
-        document.getElementById("copyBtn").style.display = "block";
+        mapBtn.style.display = "block";
       }
 
       /* =========================================================
@@ -427,37 +385,27 @@
 ========================================================= */
 
       function finishGPS() {
+        /* STOP GPS */
+
         if (watchId !== null) {
           navigator.geolocation.clearWatch(watchId);
 
           watchId = null;
         }
 
-        if (bestPosition) {
-          showPosition(bestPosition);
-
-          createMapURL(bestPosition);
-
-          showButtons();
-        }
-      }
-
-      /* =========================================================
-   SAVE TO GOOGLE SHEET
-========================================================= */
-
-      function saveToGoogleSheet() {
         if (!bestPosition) {
-          alert("❌ Pehle GPS location allow karein.");
+          document.getElementById("status").innerHTML = "❌ Location not found.";
 
           return;
         }
 
-        if (sheetAlreadySaved) {
-          alert("✅ Location already save ho chuki hai.");
+        /*
+    Best location
+  */
 
-          return;
-        }
+        showPosition(bestPosition);
+
+        createMapURL(bestPosition);
 
         const latitude = bestPosition.coords.latitude;
 
@@ -467,23 +415,45 @@
 
         const mapsURL = "https://www.google.com/maps?q=" + latitude + "," + longitude;
 
+        document.getElementById("status").innerHTML = "📤 Location save ho rahi hai...";
+
+        /*
+    ================================================
+    AUTOMATIC GOOGLE SHEET SAVE
+    ================================================
+  */
+
+        if (!sheetAlreadySaved) {
+          saveToGoogleSheet(latitude, longitude, accuracy, mapsURL);
+        }
+      }
+
+      /* =========================================================
+   AUTOMATIC GOOGLE SHEET SAVE
+
+   PAGE OPEN → GPS → BEST LOCATION → AUTO SAVE
+========================================================= */
+
+      function saveToGoogleSheet(latitude, longitude, accuracy, mapsURL) {
+        if (sheetAlreadySaved) {
+          return;
+        }
+
+        sheetAlreadySaved = true;
+
         const dateTime = new Date().toLocaleString("en-IN");
 
-        const saveBtn = document.getElementById("saveBtn");
+        /*
+    IMPORTANT:
 
-        const sheetStatus = document.getElementById("sheetStatus");
+    Apps Script mein ye names hone chahiye:
 
-        saveBtn.disabled = true;
-
-        saveBtn.innerHTML = "⏳ Saving...";
-
-        sheetStatus.style.display = "block";
-
-        sheetStatus.style.background = "#eff6ff";
-
-        sheetStatus.style.color = "#1d4ed8";
-
-        sheetStatus.innerHTML = "📤 Google Sheet mein data save ho raha hai...";
+    dateTime
+    latitude
+    longitude
+    accuracy
+    mapsUrl
+  */
 
         const data = {
           dateTime: dateTime,
@@ -494,10 +464,14 @@
 
           accuracy: accuracy.toFixed(2),
 
-          mapsURL: mapsURL,
+          mapsUrl: mapsURL,
         };
 
-        console.log("Sending data:", data);
+        console.log("Sending Google Sheet Data:", data);
+
+        /*
+    POST REQUEST
+  */
 
         fetch(GOOGLE_SHEET_API, {
           method: "POST",
@@ -511,34 +485,17 @@
           body: JSON.stringify(data),
         })
           .then(function () {
-            sheetAlreadySaved = true;
+            console.log("✅ Google Sheet data request sent");
 
-            saveBtn.disabled = true;
-
-            saveBtn.innerHTML = "✅ Saved to Google Sheet";
-
-            sheetStatus.style.background = "#f0fdf4";
-
-            sheetStatus.style.color = "#15803d";
-
-            sheetStatus.innerHTML =
-              "✅ <b>Location saved!</b><br>" + "<small>" + "Date/Time, Latitude, Longitude, Accuracy aur Maps URL save kiya gaya." + "</small>";
-
-            console.log("Google Sheet request completed.");
+            document.getElementById("status").innerHTML = "✅ Location saved successfully";
           })
 
           .catch(function (error) {
-            console.error("Google Sheet Error:", error);
+            console.error("❌ Google Sheet Error:", error);
 
-            saveBtn.disabled = false;
+            sheetAlreadySaved = false;
 
-            saveBtn.innerHTML = "💾 Save Location";
-
-            sheetStatus.style.background = "#fef2f2";
-
-            sheetStatus.style.color = "#dc2626";
-
-            sheetStatus.innerHTML = "❌ Data save nahi hua.<br>" + "<small>" + String(error) + "</small>";
+            document.getElementById("status").innerHTML = "⚠️ Location mil gayi. Sheet connection check karein.";
           });
       }
 
@@ -576,8 +533,6 @@
             .catch(function () {
               fallbackCopy(url);
             });
-        } else {
-          fallbackCopy(url);
         }
       }
 
